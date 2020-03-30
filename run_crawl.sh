@@ -1,9 +1,9 @@
 #!/bin/bash
 
-cd "$(dirname "$0")"
+cd $(dirname $0)
 
-# Parse Args
-PROFILE_FILE='politics_it.txt'
+# Argumentos default
+PROFILE_FILE='users.txt'
 MIN_DATE=$( date --date="yesterday" +%-Y,%-m,%-d )
 STORE_DAYS=2
 SLEEP=0
@@ -15,6 +15,8 @@ function print_help {
     echo "Usage: ./run_crawl.sh -p profile_file [-d min_date] [-s archive_store_days] [-t sleep_time] [-n]" >&2 ;
     }
 
+# fazendo parse nos argumentos da linha de comando
+# args seguidos de : esperam argumentos
 while getopts  "p:d:s:t:u:w:hn" flag
 do
     case $flag in

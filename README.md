@@ -2,7 +2,7 @@
 
 Coleta perfis com utilizando [instaloader](https://instaloader.github.io/) e armazena localmente
 
-## Uso
+### Uso
 Faz download de mídias e comentários de uma lista de perfis, dada uma data de início para a coleta
 
 Execute com:
@@ -21,7 +21,7 @@ Os argumentos são:
 0 23 * * * ~/instagram_crawler_batch/run_crawl.sh -p all_it.txt -t 20 > /tmp/instagram_crawler_batch_log_$( date +\%Y_\%m_\%d_\%H_\%M_\%S ) 2>&1
 ```
 
-## Pacotes
+### Pacotes
 Python3 com os seguintes pacotes nas versões especificadas
 
 Name: instaloader
@@ -31,11 +31,16 @@ Version: 0.4.1
 
 Se utilizar o anaconda, pode ser que haja algum problema com a instalação do timeout-decorator. Melhor usar o PIP
 
-## Pastas e arquivos
+### Pastas e arquivos
 O código cria uma pasta chamada "data", com duas subpastas:
 
 * Pasta staging: separa os perfis em pastas, com um json específico para para os comentários daquela pessoa
 * Pasta archives: separa por coletas (o nome da pasta é um timestamp), contêm arquivos sobre os comentários (comments.json) e mídias (medias.json)
 
-##Obs
+###Obs
 * Lembrar também de dar permisão aos arquivos: chmod +x script
+
+## Scripts
+
+### run_crawl.sh
+Realiza o parsing inicial dos argumentos da linha de comando e executa os demais scripts. Tem alguns argumentos default salvos, mas o ideal é especificar sempre que usar.
