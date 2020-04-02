@@ -31,7 +31,7 @@ Version: 0.4.1
 
 Se utilizar o anaconda, pode ser que haja algum problema com a instalação do timeout-decorator. Melhor usar o PIP
 
-###Obs
+### Obs
 * Lembrar também de dar permisão aos arquivos: chmod +x script
 
 ## Scripts
