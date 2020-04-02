@@ -46,6 +46,13 @@ Recebe os argumentos obtidos no script run_crawl.sh: arquivo com os usernames, d
 
 Este script lê um usuário por vez e passa como entrada para o instaloader, junto com os demais parâmetros especificados. O instaloader gera um log que é salvo na pasta /tmp/. Esse log é apresentado no terminal ao executar o código.
 
+
+### 1_download_comments.py
+
+Utiliza os arquivos .xz para coletar os códigos identificadores de mídias/posts. Em seguida, utliza a interface do instaloader para coletar todos os comentários daquele post. Caso um comentário tenha respostas, coleta essa informação
+deixando explícito qual o comentário pai e qual o filho.
+
+
 ## Arquivos
 
 ### Pastas
@@ -69,5 +76,6 @@ Dentro da pasta de um usuário (ex: `data/staging/minsaude`), são armazenadas a
 * owner_id: id gerada para o dono do comentário
 * tags: tags que o usuário usou no comentário
 * mentioned_usernames: usernames que o dono do comentário citou
+* parent_comment_id: se o comentário é uma resposta a outro, identifica qual o comentário original utilizando sua ID
 
 *Arquivo de Informações do Perfil*: Tem formato `$USERNAME_$ID.json` e tem informações gerais sobre o perfil coletado.

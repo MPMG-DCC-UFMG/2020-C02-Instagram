@@ -21,12 +21,13 @@ def main():
     folders = os.listdir(INPUT_DIR)
     folders = sorted(folders)
     n_folders = len(folders)
+    ## ate aqui coleta as pastas de cada usuario. abaixo itera sobre elas
     for count in range(len(folders)):
         print("Collecting profile", (count+1),"of",n_folders,"---",folders[count])
         codes = set()
         outfile = INPUT_DIR+"/"+folders[count]+"/comments_"+folders[count]+".json"
-        OUTFILE = outfile
-        for f in os.listdir(INPUT_DIR+"/"+folders[count]):
+        OUTFILE = outfile #refatorar: excluir outfile
+        for f in os.listdir(INPUT_DIR+"/"+folders[count]): # essa parte coleta os codigos identificadores do post/midia
             # if f.endswith("UTC.json.xz"):
             if "UTC.json.xz" in f:
                 try:
@@ -39,7 +40,7 @@ def main():
 
         # Crawl for each post
         fo = open(OUTFILE, "a+")
-        i = instaloader.Instaloader()
+        i = instaloader.Instaloader() # refatorar trocar i para iloader
         codes_list = sorted(codes)
         post_counter = 1
         #agora coleta por conta
@@ -51,6 +52,7 @@ def main():
                 # For each comment
                 n_comm = 0
                 comments = get_comments_safe(i, code)
+                # usa o instaloader instanciado e um codigo de midia para coletar os comentarios daquele post
                 for comment in comments:
 
                     my_comment = {}
@@ -69,7 +71,6 @@ def main():
                     my_comment['mentioned_usernames']=list(users)
 
                     print (json.dumps(my_comment), file = fo)
-
                     for reply in comment.answers:
                         my_reply = {}
                         my_reply["text"]              = reply.text
@@ -106,7 +107,7 @@ def now_str():
     return datetime.now().strftime("[%Y-%m-%d %H:%M:%S]")
 
 @timeout_decorator.timeout(TIMEOUT)
-def get_comments_safe(il, short_code):
+def get_comments_safe(il, short_code): # retorna os comentarios dado um identificado de post (shortcode)
     post = instaloader.Post.from_shortcode(il.context, short_code)
     n_comm = 0
     comments = []
