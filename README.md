@@ -31,12 +31,6 @@ Version: 0.4.1
 
 Se utilizar o anaconda, pode ser que haja algum problema com a instalação do timeout-decorator. Melhor usar o PIP
 
-### Pastas e arquivos
-O código cria uma pasta chamada "data", com duas subpastas:
-
-* Pasta staging: separa os perfis em pastas, com um json específico para para os comentários daquela pessoa
-* Pasta archives: separa por coletas (o nome da pasta é um timestamp), contêm arquivos sobre os comentários (comments.json) e mídias (medias.json)
-
 ###Obs
 * Lembrar também de dar permisão aos arquivos: chmod +x script
 
@@ -44,3 +38,36 @@ O código cria uma pasta chamada "data", com duas subpastas:
 
 ### run_crawl.sh
 Realiza o parsing inicial dos argumentos da linha de comando e executa os demais scripts. Tem alguns argumentos default salvos, mas o ideal é especificar sempre que usar.
+
+
+### 1_download.sh
+
+Recebe os argumentos obtidos no script run_crawl.sh: arquivo com os usernames, data inicial para coleta, tempo de espera entre coleta de perfis, caminho para a pasta onde serão salvos os arquivos, além de username e password que são argumentos opcionais.
+
+Este script lê um usuário por vez e passa como entrada para o instaloader, junto com os demais parâmetros especificados. O instaloader gera um log que é salvo na pasta /tmp/. Esse log é apresentado no terminal ao executar o código.
+
+## Arquivos
+
+### Pastas
+O código cria uma pasta chamada "data", com duas subpastas:
+
+* Pasta staging: separa os perfis em pastas, com um json específico para para os comentários daquela pessoa
+* Pasta archives: separa por coletas (o nome da pasta é um timestamp), contêm arquivos sobre os comentários (comments.json) e mídias (medias.json) de toda a coleta.
+
+Dentro da pasta `data/staging/` temos as pastas salvas para cada usuário coletado.
+Dentro da pasta de um usuário (ex: `data/staging/minsaude`), são armazenadas algumas informações: para cada usuário, baixa-se a foto de perfil, comentários para os posts do período especificado, id dada ao usuário, arquivo com informações sobre o usuário coletado e sobre as mídias dos posts coletados.
+
+*Arquivo de Mídias*: O arquivo tem como título sua timestamp de coleta e tem informações sobre as mídias, bio do dono do post e algumas informações adicionais;
+
+*Arquivo de Comentários*: Tem formato `comments_$USERNAME.json` e contêm todos os comentários dos posts coletados. Cada comentário tem os campos:
+* text: texto do comentário
+* created_time: timestamp da criação do comentário
+* created_time_str: horário da criação em formato string
+* media_code: identificador que o instagram usa em suas urls ex: www.instagram.com/p/B-F_9kMneA4/
+* id: id gerado para o comentário
+* owner_username: username do usuário que fez o comentário
+* owner_id: id gerada para o dono do comentário
+* tags: tags que o usuário usou no comentário
+* mentioned_usernames: usernames que o dono do comentário citou
+
+*Arquivo de Informações do Perfil*: Tem formato `$USERNAME_$ID.json` e tem informações gerais sobre o perfil coletado.
