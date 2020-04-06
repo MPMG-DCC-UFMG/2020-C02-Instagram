@@ -69,11 +69,11 @@ Dentro da pasta `data/staging/` temos as pastas salvas para cada usuário coleta
 Dentro da pasta de um usuário (ex: `data/staging/minsaude`), são armazenadas algumas informações: para cada usuário, baixa-se a foto de perfil, comentários para os posts do período especificado, id dada ao usuário, arquivo com informações sobre o usuário coletado e sobre as mídias dos posts coletados.
 
 
-*Arquivo Id*: Contêm a id dada aquele perfil na coleta.
+__Arquivo Id__: Contêm a id dada aquele perfil na coleta.
 
-*Arquivos de Mídias*: Cada arquivo tem como título a timestamp de postagem do post coletado. Compreende informações sobre as mídias, bio do dono do post e algumas informações adicionais.
+__Arquivos de Mídias__: Cada arquivo tem como título a timestamp de postagem do post coletado. Compreende informações sobre as mídias, bio do dono do post e algumas informações adicionais.
 
-*Arquivo de Comentários*: Tem formato `comments_$USERNAME.json` e contêm todos os comentários dos posts coletados. Cada comentário tem os campos:
+__Arquivo de Comentários__: Tem formato `comments_$USERNAME.json` e contêm todos os comentários dos posts coletados. Cada comentário tem os campos:
 * text: texto do comentário
 * created_time: timestamp da criação do comentário
 * created_time_str: horário da criação em formato string
@@ -85,4 +85,4 @@ Dentro da pasta de um usuário (ex: `data/staging/minsaude`), são armazenadas a
 * mentioned_usernames: usernames que o dono do comentário citou
 * parent_comment_id: se o comentário é uma resposta a outro, identifica qual o comentário original utilizando sua ID
 
-*Arquivo de Informações do Perfil*: Tem formato `$USERNAME_$ID.json` e tem informações gerais sobre o perfil coletado.
+__Arquivo de Informações do Perfil__: Tem formato `$USERNAME_$ID.json` e tem informações gerais sobre o perfil coletado.
