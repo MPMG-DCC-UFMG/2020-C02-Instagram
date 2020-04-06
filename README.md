@@ -62,13 +62,16 @@ os comentários e informações sobre os posts obtidos pelo instaloader em dois 
 ### Pastas
 O código cria uma pasta chamada "data", com duas subpastas:
 
-* Pasta staging: separa os perfis em pastas, com um json específico para para os comentários daquela pessoa
+* Pasta staging: separa os perfis em pastas, com um json específico para para os comentários daquele perfil, assim como um json para cada post coletado (o nome do arquivo corresponde ao timestamp de postagem)
 * Pasta archives: separa por coletas (o nome da pasta é o timestamp do horário da coleta), contêm arquivos sobre os comentários (comments.json) e mídias (medias.json) de toda a coleta.
 
 Dentro da pasta `data/staging/` temos as pastas salvas para cada usuário coletado.
 Dentro da pasta de um usuário (ex: `data/staging/minsaude`), são armazenadas algumas informações: para cada usuário, baixa-se a foto de perfil, comentários para os posts do período especificado, id dada ao usuário, arquivo com informações sobre o usuário coletado e sobre as mídias dos posts coletados.
 
-*Arquivo de Mídias*: O arquivo tem como título sua timestamp de coleta e tem informações sobre as mídias, bio do dono do post e algumas informações adicionais;
+
+*Arquivo Id*: Contêm a id dada aquele perfil na coleta.
+
+*Arquivos de Mídias*: Cada arquivo tem como título a timestamp de postagem do post coletado. Compreende informações sobre as mídias, bio do dono do post e algumas informações adicionais.
 
 *Arquivo de Comentários*: Tem formato `comments_$USERNAME.json` e contêm todos os comentários dos posts coletados. Cada comentário tem os campos:
 * text: texto do comentário
