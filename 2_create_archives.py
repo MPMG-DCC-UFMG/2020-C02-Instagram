@@ -21,6 +21,7 @@ TIME=datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
 if not os.path.exists("data/archives/{}".format(TIME)):
     os.makedirs("data/archives/{}".format(TIME))
 
+# cria os aquivos de saida esperados
 OUTPUT_ARCHIVE_COMMENTS         ="data/archives/{}/comments.json".format(TIME)
 OUTPUT_ARCHIVE_MEDIAS           ="data/archives/{}/medias.json".format(TIME)
 OUTPUT_ARCHIVE_MEDIAS_PERIODIC  ="data/archives/{}/medias_periodic.json".format(TIME)
@@ -40,7 +41,7 @@ for f in glob.glob("{}/*/*.json.xz".format(INPUT_DIR)):
     try:
 
         if "UTC" in f:
-
+            #abrindo os arquivos de midia para cada usuario coletado
             media = json.loads(lzma.open(f, "r").read().decode("utf-8"))
             media_code = media["node"]["shortcode"]
             print (now_str(), "Processing post:", media_code)

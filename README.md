@@ -52,6 +52,10 @@ Este script lê um usuário por vez e passa como entrada para o instaloader, jun
 Utiliza os arquivos .xz para coletar os códigos identificadores de mídias/posts. Em seguida, utliza a interface do instaloader para coletar todos os comentários daquele post. Caso um comentário tenha respostas, coleta essa informação
 deixando explícito qual o comentário pai e qual o filho.
 
+### 2_create_archives.py
+Utiliza os arquivos de comentário e posts gerados para cada usuário. Apenas concatena
+os comentários e informações sobre os posts obtidos pelo instaloader em dois arquivos
+únicos para cada coleta (comments.json e medias.json).
 
 ## Arquivos
 
@@ -59,7 +63,7 @@ deixando explícito qual o comentário pai e qual o filho.
 O código cria uma pasta chamada "data", com duas subpastas:
 
 * Pasta staging: separa os perfis em pastas, com um json específico para para os comentários daquela pessoa
-* Pasta archives: separa por coletas (o nome da pasta é um timestamp), contêm arquivos sobre os comentários (comments.json) e mídias (medias.json) de toda a coleta.
+* Pasta archives: separa por coletas (o nome da pasta é o timestamp do horário da coleta), contêm arquivos sobre os comentários (comments.json) e mídias (medias.json) de toda a coleta.
 
 Dentro da pasta `data/staging/` temos as pastas salvas para cada usuário coletado.
 Dentro da pasta de um usuário (ex: `data/staging/minsaude`), são armazenadas algumas informações: para cada usuário, baixa-se a foto de perfil, comentários para os posts do período especificado, id dada ao usuário, arquivo com informações sobre o usuário coletado e sobre as mídias dos posts coletados.
