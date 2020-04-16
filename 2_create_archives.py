@@ -17,6 +17,7 @@ OUTPUT_DIR="data/archives"
 INPUT_ARCHIVE_COMMENTS="data/staging/comments.json" #agora tá subdividido
 
 # Create Archive Dir
+# Cria pasta onde arquivos serão armazenados
 TIME=datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
 if not os.path.exists("data/archives/{}".format(TIME)):
     os.makedirs("data/archives/{}".format(TIME))
@@ -30,7 +31,7 @@ OUTPUT_ARCHIVE_PROFILES_PERIODIC="data/archives/{}/profiles_periodic.json".forma
 print (now_str(), "Creating archives at:", "data/archives/{}".format(TIME))
 
 
-# PROFILES AND MEDIAS
+# perfis e midias
 fo_medias = open(OUTPUT_ARCHIVE_MEDIAS, "w")
 fo_medias_periodic = open(OUTPUT_ARCHIVE_MEDIAS_PERIODIC, "w")
 fo_profiles_periodic = open(OUTPUT_ARCHIVE_PROFILES_PERIODIC, "w")
