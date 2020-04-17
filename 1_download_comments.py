@@ -109,7 +109,7 @@ def collect_comments(media_codes_list, outfile, iloader):
         except Exception as e:
             print (now_str(), "Error for post", code)
 
-def main():
+def download_comments(INPUT_DIR):
     folders = sorted(os.listdir(INPUT_DIR)) #as pastas tem como nome o username de cada usuario
     n_folders = len(folders)
     for count in range(n_folders):
@@ -131,4 +131,4 @@ def main():
 
     print (now_str(), "Finished")
 
-main()
+download_comments(INPUT_DIR)
