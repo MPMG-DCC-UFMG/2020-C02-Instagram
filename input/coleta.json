@@ -1,0 +1,7 @@
+{
+  "users": ["anvisaoficial", "minsaude"],
+  "min_date": "2020,4,25",
+  "sleep_time": 1,
+  "users_to_download_media": ["anvisaoficial", "minsaude"],
+  "crawler": "instagram"
+}
