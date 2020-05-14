@@ -164,6 +164,6 @@ def create_archives(INPUT_DIR, OUTPUT_DIR, INPUT_ARCHIVE_COMMENTS):
 INPUT_DIR = "data/staging"
 OUTPUT_DIR = "data/archives"
 INPUT_ARCHIVE_COMMENTS = "data/staging/comments.json"
-TIME = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-
+TIME = int(datetime.datetime.now().replace(microsecond=0).timestamp())
+# TIME = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S") versao antiga
 create_archives(INPUT_DIR, OUTPUT_DIR, INPUT_ARCHIVE_COMMENTS)

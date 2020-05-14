@@ -52,8 +52,8 @@ if ${DELETE}; then
     echo "================="
     #rm -f data/staging/*/*
     #rmdir data/staging/*
-    LAST_FILE_LIST=($(ls --sort=time data/archives/))
-    echo "${LAST_FILE_LIST[0]}"
+    LAST_FILE_LIST=($(ls --sort=version -r data/archives/))
+    echo "Unix Timestamp of Archive: ${LAST_FILE_LIST[0]}"
     mv data/staging/ data/archives/"${LAST_FILE_LIST[0]}"/
 
     # 4 - Remove old archives
