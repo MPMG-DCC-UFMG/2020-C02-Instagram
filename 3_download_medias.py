@@ -120,8 +120,11 @@ except:
 
 try:
     users = set(input_json['users_to_download_media'])
+    print("Downloading media from specified users:")
+    print('\t'+', '.join(users))
 except:
     users = None
+    print("Downloading media from all users.")
 
 
 # Download das mídias
@@ -134,4 +137,4 @@ for post in data:
         count += 1
 
 if count > 0:
-    print("Aviso:", count, "posts não reconhecidos")
+    print("Warning:", count, "unrecognized posts.")
