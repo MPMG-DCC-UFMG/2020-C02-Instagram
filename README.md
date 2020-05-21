@@ -57,6 +57,12 @@ Utiliza os arquivos de comentário e posts gerados para cada usuário. Apenas co
 os comentários e informações sobre os posts obtidos pelo instaloader em dois arquivos
 únicos para cada coleta (comments.json e medias.json).
 
+### 3_download_medias.py
+Executa após a coleta. Itera pelos post, faz a requisição de cada uma das mídias (fotos ou vídeos) e salva dentro da pasta *images* do *archives* correspondente.
+
+### download_medias.py
+Aqui define-se a classe que de fato realiza as requisições das mídias do script anterior.
+
 ## Arquivos
 
 ### Pastas
