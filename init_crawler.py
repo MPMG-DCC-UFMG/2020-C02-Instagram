@@ -1,6 +1,7 @@
 import sys
 import json
 import os
+from download_medias import download_medias as dm
 
 USERS_FILENAME = "breno.txt"
 
@@ -46,8 +47,8 @@ def download_medias(input_json):
     print("======================")
     print("DOWNLOADING MEDIAS")
     print("======================")
-    command = "python3 3_download_medias.py " + str(input_json)
-    os.system(command)
+    download_photo = dm(input_json)
+    download_photo.download(verbose=True)
 
 
 input_json = get_input_json()

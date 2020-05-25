@@ -1,7 +1,7 @@
 {
-  "users": ["anvisaoficial", "minsaude"],
+  "users": ["juniacardoso", "matheuslaneri", "anaju_cf", "brady_haran"],
   "min_date": "2020,4,25",
   "sleep_time": 1,
-  "users_to_download_media": ["anvisaoficial", "minsaude"],
+  "users_to_download_media": ["juniacardoso", "matheuslaneri", "brady_haran"],
   "crawler": "instagram"
 }
