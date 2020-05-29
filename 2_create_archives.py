@@ -13,9 +13,9 @@ import shutil
 def aggregate_comments(final_comments_file_path):
     try:
         folders = sorted(os.listdir(INPUT_DIR))
-        # folders = sorted(folders)
         n_folder = len(folders)
         final_file = open(final_comments_file_path, "a+")
+        # Transformando em um json so, ao contrario de 1 por linha
         print("{\"data\": [", file=final_file)
         for count in range(n_folder):  # pastas sao os nomes dos usuarios coletados
             comment_file_path = INPUT_DIR+"/" + \
@@ -32,7 +32,9 @@ def aggregate_comments(final_comments_file_path):
 
 
 def aggregate_profiles(input_dir_path, outfile_profiles_periodic):
+    # Transformando em um json so, ao inves de um por linha
     print("{\"data\": [", file=outfile_profiles_periodic)
+    # percorre os arquivos com informacoes sobre os perfis coletados
     for f in glob.glob("{}/*/*.json.xz".format(input_dir_path)):
         if not "UTC" in f:
             try:
