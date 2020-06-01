@@ -158,12 +158,66 @@ TIMEOUT = 7200
 
 @timeout_decorator.timeout(TIMEOUT)
 class DownloadComments():
+    """
+    Classe para coletar comentários de posts do instagram. Utiliza os posts
+    coletados pela interface de linha de comando do Instaloader para isso
+
+    Atributos
+    ---------
+    max_comments : int
+        máximo de comentários *por post* que devem ser coletados
+
+    timeout : int
+        sinal para o timeout decorator. Recomendado utilizar o que já está
+        definido
+
+    input_dir : str
+        nome da pasta em que se encontram os dados dos perfis coletados
+
+    Métodos
+    ---------
+    download_comments()
+        Função que itera sobre as pastas dos perfis coletados, obtêm os códigos 
+        de posts de cada uma e dispara a coleta dos comentários para cada post
+
+    """
     def __init__(self, max_comments, timeout, input_dir):
+        """
+        Inicializa o objeto
+
+        Parâmetros
+        ---------
+        max_comments : int
+            máximo de comentários *por post* que devem ser coletados
+
+        timeout : int
+            sinal para o timeout decorator. Recomendado utilizar o que já está
+            definido
+
+        input_dir : str
+            nome da pasta em que se encontram os dados dos perfis coletados
+        """
         self.max_comments = max_comments
         self.timeout = timeout
         self.input_dir = input_dir
 
     def _collect_comments(self, media_codes_list, outfile, iloader):
+        """
+        Itera sobre a lista de códigos de post coletados. Dispara a coleta
+        dos comentários de cada post. É feito parsing em cima dos comentários
+        e respostas a comentaŕios de cada post.
+
+        Parâmetros
+        ---------
+        medias_codes_list : list(str)
+            lista dos códigos de mídia dos posts
+
+        outfile : str
+            nome do arquivo de saída onde serão armazenados os comentários
+
+        iloader : Instaloader()
+            instância do instaloader utilizada para coleta de comentários
+        """
         post_counter = 1
         for code in media_codes_list:
             print(self._now_str(), "Crawling post ", post_counter,
@@ -189,6 +243,22 @@ class DownloadComments():
                 print(self._now_str(), "Error for post", code)
 
     def _parse_comment_replies(self, parent_comment, reply, outfile, media_code):
+        """
+        Método que realiza parsing de comentários que são respostas a outros 
+        comentários, retirando apenas as informações relevantes e 
+        armazenando em um json que será armazenado em um arquivo externo
+
+        Parâmetros
+        ---------
+        parent_comment : Comment
+            objeto do tipo comentário ao qual o comentário atual está respondendo
+        reply : Comment
+            Comentário atual, resposta ao parent_comment
+        outfile : str
+            nome do arquivo onde serão os json gerados para cada comentário
+        media_code : str
+            código do post de onde o comentário foi coletado
+        """
         my_reply = {}
         my_reply["text"] = reply.text
         my_reply["created_time"] = int(reply.created_at_utc.timestamp())
@@ -211,6 +281,20 @@ class DownloadComments():
         print(json.dumps(my_reply), file=outfile)
 
     def _parse_comment(self, comment, outfile, media_code):
+        """
+        Realiza parsing em cada objeto do tipo "Comment" retornado pelo instaloader,
+        retirando apenas as informações relevantes e armazenando em um json que será
+        armazenado em um arquivo externo
+
+        Parâmetros
+        ---------
+        comment : Comment
+            objeto do tipo comentário retornado pelo instaloader
+        outfile : str
+            nome do arquivo onde serão os json gerados para cada comentário
+        media_code : str
+            código do post de onde o comentário foi coletado
+        """
         my_comment = {}
         my_comment["text"] = comment.text
         my_comment["created_time"] = int(comment.created_at_utc.timestamp())
@@ -232,10 +316,23 @@ class DownloadComments():
         print(json.dumps(my_comment), file=outfile)
 
     def _now_str(self):
+        """
+        Retorna um timestamp do momento em que a função é chamada
+        """
         return datetime.now().strftime("[%Y-%m-%d %H:%M:%S]")
 
     # retorna os comentarios dado um identificador de post (shortcode)
     def _get_comments_safe(self, il, short_code):
+        """
+        Retorna os comentários coletados de um post
+
+        Parâmetros
+        ----------
+        il : Instaloader
+            instância do instaloader criada para coletar os comentários
+        short_code : str
+            Código do post cujos comentários serão coletados
+        """
         post = instaloader.Post.from_shortcode(il.context, short_code)
         n_comm = 0
         comments = []
@@ -249,6 +346,14 @@ class DownloadComments():
         return comments
 
     def _collect_media_codes(self, current_profile, outfile):
+        """
+        Coleta os códigos do post feito por um perfil
+
+        Parâmetros
+        ----------
+        current_profile : str
+            nome do perfil de onde serão retirados os códigos de post
+        """
         codes = set()
         # essa parte coleta os codigos identificadores do post/midia
         for f in os.listdir(self.input_dir+"/"+current_profile):
@@ -266,6 +371,11 @@ class DownloadComments():
         return codes
 
     def download_comments(self):
+        """
+        Dispara o download de comentários feitos em posts coletados. Itera
+        sobre as pastas de perfis coletados, disparando coleta, parsing e 
+        armazenamento dos comentários.
+        """
         # as pastas tem como nome o username de cada usuario
         folders = sorted(os.listdir(self.input_dir))
         n_folders = len(folders)
