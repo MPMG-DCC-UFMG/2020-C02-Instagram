@@ -172,7 +172,45 @@ import shutil
 
 
 class CreateArchives():
+    """
+    Classe que cria arquivos e pastas que irão compilar informações
+    de mídias, perfis, posts e comentários coletados pelo Instaloader 
+
+    Atributos
+    ---------
+    INPUT_DIR : str
+        nome da pasta onde são armazenados os arquivos de entrada
+    OUTPUT_DIR : str
+        nome da pasta onde serão armazenados os arquivos de saída
+    INPUT_ARCHIVE_COMMENTS : str
+        nome do arquivo que irá compilar os comentários de todos os posts
+    TIME : str
+        timestamp utilizada para identificar cada pasta de coleta
+        
+
+    Métodos
+    ---------
+    create_archives()
+        Função que cria os arquivos e pastas de saída, organizando
+        os arquivos de saída gerados pela coleta de perfis, posts 
+        e comentários
+    """
     def __init__(self, INPUT_DIR, OUTPUT_DIR, INPUT_ARCHIVE_COMMENTS):
+        """
+        Inicializa o objeto
+
+        Parâmetros
+        ---------
+        INPUT_DIR : str
+            nome da pasta onde são armazenados os arquivos de entrada
+        OUTPUT_DIR : str
+            nome da pasta onde serão armazenados os arquivos de saída
+        INPUT_ARCHIVE_COMMENTS : str
+            nome do arquivo que irá compilar os comentários de todos os posts
+        TIME : str
+            timestamp utilizada para identificar cada pasta de coleta
+        
+        """
         self.INPUT_DIR = INPUT_DIR
         self.OUTPUT_DIR = OUTPUT_DIR
         self.INPUT_ARCHIVE_COMMENTS = INPUT_ARCHIVE_COMMENTS
@@ -180,6 +218,15 @@ class CreateArchives():
             microsecond=0).timestamp())
 
     def _aggregate_comments(self, final_comments_file_path):
+        """
+        Agrega todos os comentários coletados em um arquivo só.
+        Gera um .json de saída
+
+        Parâmetros
+        ---------
+        final_comments_file_path : str
+            nome do arquivo de saida que compila os comentários
+        """
         # copia todos os arquivos de comentarios coletados para um arquivo so
         try:
             folders = sorted(os.listdir(self.INPUT_DIR))
@@ -201,6 +248,15 @@ class CreateArchives():
             print(self._now_str(), "Error in copying comment file")
 
     def _aggregate_profiles(self, outfile_profiles_periodic):
+        """
+        Agrega as informações de perfis em um único .json de saída
+
+        Parâmetros
+        ---------
+        outfile_profiles_periodic : file 
+            arquivo de saída que armazena as informações sobre os perfis
+            coletados 
+        """
         # Transformando em um json so, ao inves de um por linha
         print("{\"data\": [", file=outfile_profiles_periodic)
         # percorre os arquivos com informacoes sobre os perfis coletados
@@ -229,13 +285,23 @@ class CreateArchives():
         print("{}]}", file=outfile_profiles_periodic)
 
     def _now_str(self):
+        """
+        Retorna um timestamp do momento em que a função é chamada
+        """
         return datetime.datetime.now().strftime("[%Y-%m-%d %H:%M:%S]")
 
     def _create_data_folder(self):
+        """
+        Cria pasta onde serão armazenados os arquivos da coleta atual.
+        O nome da pasta será o timestamp de sua criação
+        """
         if not os.path.exists("data/archives/{}".format(self.TIME)):
             os.makedirs("data/archives/{}".format(self.TIME))
 
     def _create_output_paths(self):
+        """
+        Cria os arquivos de saída de comentários, mídias e perfis.
+        """
         out_comments = "data/archives/{}/comments.json".format(self.TIME)
         out_medias = "data/archives/{}/medias.json".format(self.TIME)
         out_medias_periodic = "data/archives/{}/medias_periodic.json".format(
@@ -245,6 +311,18 @@ class CreateArchives():
         return out_comments, out_medias, out_medias_periodic, out_profiles_periodic
 
     def _parse_archive_medias(self, media_file, out_medias):
+        """
+        Recebe um arquivo de post/mídias, realiza parsing
+        e escreve em um arquivo de saída
+
+        Parâmetros
+        ----------
+        media : str
+            nome de um arquivo de mídia/post que será processado
+        out_medias : file
+            arquivo que ira compilar as informações de todas 
+            as mídias/posts coletadas
+        """
         media = json.loads(lzma.open(media_file, "r").read().decode("utf-8"))
         media_code = media["node"]["shortcode"]
         print(self._now_str(), "Processing post:", media_code)
@@ -282,6 +360,19 @@ class CreateArchives():
         return my_post
 
     def _parse_archive_periodic_media(self, my_post, out_medias_periodic):
+        """
+        Realiza parsing de arquivos do tipo "periodic_media"
+
+        Parâmetros
+        ----------
+        my_post : Post
+            objeto do tipo post do qual serão retiradas 
+            as informações de interesse
+        out_medias_periodic : file
+            arquivo de saída em que serão compilados os
+            arquivos do tipo "periodic_medias"
+        
+        """
         periodic_media = {}
         periodic_media["short_code"] = my_post["short_code"]
         periodic_media["likes_count"] = my_post["likes_count"]
@@ -292,6 +383,19 @@ class CreateArchives():
         print(json.dumps(periodic_media) + ",", file=out_medias_periodic)
 
     def _parse_medias(self, fo_medias, fo_medias_periodic):
+        """
+        Itera sobre os .json de mídias de cada perfil e faz 
+        a chamada para as funções de parsing de "medias" e "medias_periodic"
+
+        Parâmetros
+        ----------
+        fo_medias : file
+            arquivo de saída onde serão armazenadas as informações do
+            tipo "media"
+        fo_medias_periodic : file
+            arquivo de saída onde serão armazenadas as informações do
+            tipo "periodic_media"
+        """
         print("{\"data\": [", file=fo_medias)
         print("{\"data\": [", file=fo_medias_periodic)
         for f in glob.glob("{}/*/*.json.xz".format(self.INPUT_DIR)):
@@ -307,6 +411,11 @@ class CreateArchives():
         print("{}]}", file=fo_medias_periodic)
 
     def create_archives(self):
+        """
+        Cria pastas e arquivos de saída, faz chamadas para 
+        funções que agregam comentários, posts, informações 
+        de perfis
+        """
         # Cria pasta onde arquivos serão armazenados
         self._create_data_folder()
         # cria os aquivos de saida esperados
