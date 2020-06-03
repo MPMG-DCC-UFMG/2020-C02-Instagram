@@ -38,12 +38,12 @@ echo "=============================="
 ./1_download.sh $PROFILE_FILE $MIN_DATE $SLEEP $USERNAME $PASSWORD
 echo "DOWNLOADING COMMENTS"
 echo "===================="
-./1_download_comments.py
+./download_comments.py
 
 # 2 - Create Archives
 echo "CREATING ARCHIVES"
 echo "================="
-./2_create_archives.py
+./create_archives.py
 
 # 3 - Delete Staging
 if ${DELETE}; then
