@@ -25,10 +25,6 @@ class DownloadComments():
     max_comments : int
         máximo de comentários *por post* que devem ser coletados
 
-    timeout : int
-        sinal para o timeout decorator. Recomendado utilizar o que já está
-        definido
-
     input_dir : str
         nome da pasta em que se encontram os dados dos perfis coletados
 
@@ -39,7 +35,7 @@ class DownloadComments():
         de posts de cada uma e dispara a coleta dos comentários para cada post
 
     """
-    def __init__(self, max_comments, timeout, input_dir):
+    def __init__(self, max_comments, input_dir):
         """
         Inicializa o objeto
 
@@ -48,15 +44,10 @@ class DownloadComments():
         max_comments : int
             máximo de comentários *por post* que devem ser coletados
 
-        timeout : int
-            sinal para o timeout decorator. Recomendado utilizar o que já está
-            definido
-
         input_dir : str
             nome da pasta em que se encontram os dados dos perfis coletados
         """
         self.max_comments = max_comments
-        self.timeout = timeout
         self.input_dir = input_dir
 
     def _collect_comments(self, media_codes_list, outfile, iloader):
@@ -203,7 +194,7 @@ class DownloadComments():
                 break
         return comments
 
-    def _collect_media_codes(self, current_profile, outfile):
+    def _collect_media_codes(self, current_profile):
         """
         Coleta os códigos do post feito por um perfil
 
@@ -243,7 +234,7 @@ class DownloadComments():
                   n_folders, "---", current_profile)
             OUTFILE = self.input_dir+"/"+current_profile+"/comments_"+current_profile+".json"
 
-            codes = self._collect_media_codes(current_profile, OUTFILE)
+            codes = self._collect_media_codes(current_profile)
 
             fo = open(OUTFILE, "a+")
             iloader = instaloader.Instaloader()
@@ -262,5 +253,5 @@ MAX_COMMENTS = 100000
 INPUT_DIR = "data/staging"
 
 
-dc = DownloadComments(MAX_COMMENTS, TIMEOUT, INPUT_DIR)
+dc = DownloadComments(MAX_COMMENTS, INPUT_DIR)
 dc.download_comments()
