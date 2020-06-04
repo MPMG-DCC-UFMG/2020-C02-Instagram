@@ -115,6 +115,22 @@ class download_medias():
         self.__get_path()
         self.__get_users()
 
+    
+    def __request(self, filename, url):
+        """
+        Faz a requisição da mídia e escreve no disco.
+
+        Parametros
+        ----------
+        filename : str
+            Nome da mídia no disco.
+        url : str
+            Endereço url da mídia.
+        """
+        r = requests.get(url) 
+        with open(filename, 'wb') as f: 
+            f.write(r.content) 
+
 
     def __twitter(self, post):
         """
@@ -137,13 +153,24 @@ class download_medias():
                     elif photo['type'] == 'video':
                         filename = path + str(number) + '.mp4' 
         
-                    r = requests.get(photo['url']) 
-                    with open(filename, 'wb') as f: 
-                        f.write(r.content) 
+                    self.__request(filename, photo['url'])
                     number += 1
         
         except:
             return False
+
+
+    def __get_post(self, code):
+        """
+        Cria uma instancia do post como objeto do instaloader
+
+        Parametros
+        ----------
+        code : str
+            O short code do post do instagram
+        """
+        iloader = instaloader.Instaloader()
+        return instaloader.Post.from_shortcode(iloader.context, code)
 
 
     def __instagram(self, post):
@@ -160,22 +187,31 @@ class download_medias():
         try:
             path = self.path + post['id']
             if self.users is None or post['owner_username'] in self.users:
-                if post['is_video']:
-                    filename = path + '.mp4' 
-                    iloader = instaloader.Instaloader()
-                    get_post = instaloader.Post.from_shortcode(
-                            iloader.context, post['short_code'])
-                    url = get_post.video_url
+                if post["__typename"] == "GraphSidecar":
+                    _post = self.__get_post(post["short_code"])
+                    photos = _post.get_sidecar_nodes()
+                    idx = 1
+                    for img in photos:
+                        vid = img.is_video
+                        filename = path + '_' + str(idx)
+                        filename += ".mp4" if vid else ".jpg"
+                        url = img.video_url if vid else img.display_url
+                        self.__request(filename, url)
+                        idx += 1
                 else:
-                    filename = path + '.jpg' 
-                    url = post['image_url']
-        
-                r = requests.get(url) 
-                with open(filename, 'wb') as f: 
-                    f.write(r.content) 
+                    if post['is_video']:
+                        filename = path + '.mp4' 
+                        _post = self.__get_post(post["short_code"])
+                        url = _post.video_url
+                    else:
+                        filename = path + '.jpg' 
+                        url = post['image_url']
+                    
+                    self.__request(filename, url)
+
             return True
-        
-        except:
+
+        except Exception as e:
             return False
 
 
@@ -201,7 +237,7 @@ class download_medias():
                 print("Downloading media from specified users:")
                 print('\t'+', '.join(self.users))
 
-        count = 0
+        count = -1
         for post in self.data:
             status = self.__twitter(post) if self.is_twitter \
                 else self.__instagram(post)
@@ -210,4 +246,4 @@ class download_medias():
                 count += 1
 
         if count > 0 and verbose:
-            print("Warning:", count, "unrecognized posts.")
+            print("Warning:", count, "missing posts.")
