@@ -29,7 +29,7 @@ Os argumentos são:
 
 - `users`: Lista de perfis que serão coletados, incluindo informações sobre posts, perfis e comentários
 - `min_date`: Data de início da coleta. O default é ontem, caso uma data não seja específicada. O formato da data deve ser `YYYY,MM,DD`, sem zeros à esquerda. Exemplo: 20/03/2020, deve-se _remover_ os zeros à esquerda, da seguinte forma: 2020,3,20
-- `sleep_time`: Tempo (em segundos) de espera entre coleta de perfis. Default é `0`.
+- `sleep_time`: Tempo (em segundos) de espera entre coleta de perfis. Caso não for utlizar, definir como `0`.
 - `users_to_download_media`: lista de perfis que terão suas mídias coletadas. Isso significa fazer download dos vídeos e imagens postados na timeline do perfil, dentro do período especificado
 - `crawler`: deve sempre ter "instagram" como argumento, pois usa um módulo genérico que faz download de mais de uma rede social.
 
