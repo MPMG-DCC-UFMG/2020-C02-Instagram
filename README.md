@@ -179,7 +179,7 @@ Algumas classes foram implementadas, suas documentações seguem abaixo:
 
 O código cria uma pasta chamada "data", com uma subpasta "archives:
 
-Dentro de archives, estão as pastas relativas a cada coleta iniciada, nomeadas com o timestamp do fim da coleta em [Unix time](https://en.wikipedia.org/wiki/Unix_time), desprezando os milisegundos. Dessa forma, é possível recuperar a ordem em que as coletas foram feitas.
+Dentro de archives, estão as pastas relativas a cada coleta iniciada, nomeadas com o timestamp do fim da coleta em [Unix time](https://en.wikipedia.org/wiki/Unix_time), desprezando os milisegundos. Dessa forma, é possível recuperar a ordem em que as coletas foram feitas, importante para algumas subtarefas do coletor.
 
 Dentro de uma pasta de coleta, temos arquivos sobre os comentários (comments.json) e mídias (medias.json) de toda a coleta, compilados. Além disso, temos as pastas:
 
