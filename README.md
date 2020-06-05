@@ -44,9 +44,11 @@ Version: 0.4.1
 
 Se utilizar o Anaconda, pode ser que haja algum problema com a instalação do timeout-decorator. Melhor usar o PIP para instalar os pacotes
 
-### Obs
+### Observações
 
 - Lembrar também de dar permisão aos arquivos: chmod +x script
+- _Importante_: só é possível iniciar uma coleta por vez em uma mesma pasta com os arquivos fonte. Isto é necessário para garantir que as manipulações e movimentações de arquivos e pastas, necessárias para gerar as saídas corretamente, tenham integridade preservada. Para contornar isso, é possível alinhar as coletas para executar em sequência em uma mesma pasta, ou então executar coletas paralalemante em pastas diferentes. Este último deve ser evitado, para evitar queries excessivas ao Instagram.
+- Não executar o Instagram em navegador ao mesmo tempo que realiza coletas
 
 ## Scripts
 
