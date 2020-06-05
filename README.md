@@ -173,6 +173,38 @@ Algumas classes foram implementadas, suas documentações seguem abaixo:
         funções que agregam comentários, posts, informações
         de perfis
 
+
+### download_medias
+
+    Classe para realizar o download das mídias de posts de Twitter
+    ou Instagram coletados via os coletores desenvolvidos para o
+    projeto do Ministério Público de Minas Gerais.
+
+    Atributos
+    ---------
+    folder : str
+        Nome da pasta padrão da coleta do Instagram.
+    path : str
+        Nome do diretório de saída para o download das mídias.
+    data : list de dict
+        Lista dos posts coletados. Cada post é um dict contendo
+        variadas informações (texto, data, url da mídia etc).
+    users : list de str
+        Lista de usuários cujas mídias devem ser baixadas. Caso seja
+        None, todos os usuários devem ser considerados.
+    is_twitter : bool
+        Verdadeiro caso seja uma coleta de Twitter, falso caso seja
+        de Instagram.
+
+    Métodos
+    -------
+    download(verbose)
+        Função que itera pelos posts e chama as funções
+        correspondente ao tipo de post (instagram ou twitter)
+        para baixar as mídias (se pertencerem a um dos usuários
+        pré-definidos).
+
+
 ## Arquivos
 
 ### Pastas
