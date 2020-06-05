@@ -77,6 +77,100 @@ os comentários e informações sobre os posts obtidos pelo instaloader em dois 
 
 Executa por último. Define uma classe que itera pelos posts, faz a requisição de cada uma das mídias (fotos ou vídeos) e salva dentro da pasta _images_ do _archives_ correspondente.
 
+## Classes
+
+Algumas classes foram implementadas, suas documentações seguem abaixo:
+
+### Coletor
+
+    Classe para inicializar o coletor. Realiza a leitura da entrada via
+    argumento de linha de comando, e passa para os módulos que coletam
+    as informações de cada perfil, assim como o download das mídias dos
+    perfis selecionados.
+
+    Atributos
+    -----------
+    input_json : str
+        Nome do arquivo .json lido como entrada via linha de comando
+
+    Métodos
+    -----------
+    Coletor():
+        Construtor. Inicializa o objeto.
+
+    init_crawler()
+        Função que inicializa o crawler, lendo o arquivo .json de entrada
+        e fazendo a chamada das funções que inicializam a coleta dos perfis
+        e das mídias.
+
+### DownloadComments
+
+    Classe para coletar comentários de posts do instagram. Utiliza os posts
+    coletados pela interface de linha de comando do Instaloader para isso
+
+    Atributos
+    ---------
+    max_comments : int
+        máximo de comentários *por post* que devem ser coletados
+
+    input_dir : str
+        nome da pasta em que se encontram os dados dos perfis coletados
+
+    Métodos
+    ---------
+    DownloadComments(max_comments, input_dir):
+        Inicializa o objeto
+
+        Parâmetros
+        ---------
+        max_comments : int
+            máximo de comentários *por post* que devem ser coletados
+
+        input_dir : str
+            nome da pasta em que se encontram os dados dos perfis coletados
+
+    download_comments()
+        Função que itera sobre as pastas dos perfis coletados, obtêm os códigos
+        de posts de cada uma e dispara a coleta dos comentários para cada post
+
+### CreateArchives
+
+    Classe que cria arquivos e pastas que irão compilar informações
+    de mídias, perfis, posts e comentários coletados pelo Instaloader
+
+    Atributos
+    ---------
+    INPUT_DIR : str
+        nome da pasta onde são armazenados os arquivos de entrada
+    OUTPUT_DIR : str
+        nome da pasta onde serão armazenados os arquivos de saída
+    INPUT_ARCHIVE_COMMENTS : str
+        nome do arquivo que irá compilar os comentários de todos os posts
+    TIME : str
+        timestamp utilizada para identificar cada pasta de coleta
+
+
+    Métodos
+    ---------
+    CreateArchives(INPUT_DIR, OUTPUT_DIR, INPUT_ARCHIVE_COMMENTS):
+        Construtor, inicializa o objeto
+
+        Parâmetros
+        ---------
+        INPUT_DIR : str
+            nome da pasta onde são armazenados os arquivos de entrada
+        OUTPUT_DIR : str
+            nome da pasta onde serão armazenados os arquivos de saída
+        INPUT_ARCHIVE_COMMENTS : str
+            nome do arquivo que irá compilar os comentários de todos os posts
+        TIME : str
+            timestamp utilizada para identificar cada pasta de coleta
+
+    create_archives():
+        Cria pastas e arquivos de saída, faz chamadas para
+        funções que agregam comentários, posts, informações
+        de perfis
+
 ## Arquivos
 
 ### Pastas
