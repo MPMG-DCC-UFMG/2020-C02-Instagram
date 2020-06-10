@@ -3,5 +3,6 @@
   "min_date": "2020,5,1",
   "sleep_time": 1,
   "users_to_download_media": ["anvisaoficial", "minsaude"],
+  "max_comments": 10000,
   "crawler": "instagram"
 }

@@ -3,7 +3,8 @@ import json
 import os
 from download_medias import download_medias as dm
 
-USERS_FILENAME = "users.txt"
+USERS_FILENAME = "users.txt" # nao alterar
+MAX_COMMENT_FILE = "max_comment_file.txt" # nao alterar
 
 class Coletor():
     """
@@ -51,6 +52,11 @@ class Coletor():
             print("No input file provided. Exiting program...")
             quit()
         return input_json
+
+    def _create_max_comments_input_file(self, input_json_data, max_comment_file):
+        with open(max_comment_file, "w") as f:
+            # print(str(input_json_data["max_comments"]))
+            f.write(str(input_json_data["max_comments"]))
 
     def _create_users_input_file(self, input_json_data, aux_users_filename):
         """
@@ -108,8 +114,10 @@ class Coletor():
         sleep_time = input_json_data["sleep_time"]
         min_date = input_json_data["min_date"]
         self._create_users_input_file(input_json_data, USERS_FILENAME)
+        self._create_max_comments_input_file(input_json_data, MAX_COMMENT_FILE)
         self._init_comandline_crawler(sleep_time, min_date, USERS_FILENAME)
         os.remove(USERS_FILENAME)
+        os.remove(MAX_COMMENT_FILE)
 
     def _download_medias(self):
         """

@@ -248,8 +248,9 @@ class DownloadComments():
 
         print(self._now_str(), "Finished")
 
+with open("max_comment_file.txt") as f:
+    MAX_COMMENTS = int(f.read())
 
-MAX_COMMENTS = 100000
 INPUT_DIR = "data/staging"
 
 

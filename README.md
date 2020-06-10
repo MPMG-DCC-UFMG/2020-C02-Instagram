@@ -20,8 +20,10 @@ A entrada recebida pelo programa tem o formato:
   "min_date": "2020,5,1",
   "sleep_time": 1,
   "users_to_download_media": ["anvisaoficial", "minsaude"],
+  "max_comments": 10000,
   "crawler": "instagram"
 }
+
 
 ```
 
@@ -31,6 +33,7 @@ Os argumentos são:
 - `min_date`: Data de início da coleta. O default é ontem, caso uma data não seja específicada. O formato da data deve ser `YYYY,MM,DD`, sem zeros à esquerda. Exemplo: 20/03/2020, deve-se _remover_ os zeros à esquerda, da seguinte forma: 2020,3,20
 - `sleep_time`: Tempo (em segundos) de espera entre coleta de perfis. Caso não for utlizar, definir como `0`.
 - `users_to_download_media`: lista de perfis que terão suas mídias coletadas. Isso significa fazer download dos vídeos e imagens postados na timeline do perfil, dentro do período especificado. Note que este campo deve conter um subconjunto do campo `users`, pois não é possível realizar o download de mídias de perfis que não foram coletados.
+- `max_comments`: máximo de comentários *por post* que devem ser coletados
 - `crawler`: deve sempre ter "instagram" como argumento, pois usa um módulo genérico que faz download de mais de uma rede social.
 
 ### Pacotes
