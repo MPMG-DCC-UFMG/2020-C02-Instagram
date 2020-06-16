@@ -45,6 +45,10 @@ Version: 4.2.9
 Name: timeout-decorator
 Version: 0.4.1
 
+```
+pip install -r requirements.txt 
+```
+
 Se utilizar o Anaconda, pode ser que haja algum problema com a instalação do timeout-decorator. Melhor usar o PIP para instalar os pacotes
 
 ### Observações

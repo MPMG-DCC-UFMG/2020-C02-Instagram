@@ -1,0 +1,3 @@
+###### Pacotes com versões testadas ######
+instaloader == 4.2.9
+timeout-decorator == 0.4.1
