@@ -29,7 +29,6 @@ while read profile; do
         instaloader $profile  $LOGIN    --no-pictures \
                                         --no-videos \
                                         --no-video-thumbnails \
-                                        --no-captions \
                                         --post-filter="date_utc >= datetime($MIN_DATE)" \
                                         --dirname-pattern="$OUTDIR/{profile}" \
                                         > /tmp/instaloader_output_$profile 2>&1 &

@@ -207,7 +207,7 @@ class DownloadComments():
         # essa parte coleta os codigos identificadores do post/midia
         for f in os.listdir(self.input_dir+"/"+current_profile):
             # if f.endswith("UTC.json.xz"):
-            if "UTC.json.xz" in f:
+            if "UTC.json" in f:
                 try:
                     media = json.loads(lzma.open(
                         self.input_dir+"/"+current_profile+'/'+str(f), "r").read().decode("utf-8"))
