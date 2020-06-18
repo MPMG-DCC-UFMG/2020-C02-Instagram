@@ -266,6 +266,7 @@ Dentro de uma pasta de coleta, temos arquivos sobre os comentários (comments.js
 
 - Pasta staging: Separa os perfis em pastas, com um json específico para para os comentários daquele perfil, assim como um json para cada post coletado (o nome do arquivo corresponde ao timestamp de postagem)
 - Pasta images: Imagens e vídeos coletados para os perfis especificados no campo "users_to_download_media" da entrada
+- Pasta followers: Lista de seguidores de cada perfil especificados no campo "users_to_download_followers" da entrada
 
 Dentro da pasta `/staging/` temos as pastas salvas para cada usuário coletado.
 Dentro da pasta de um usuário (ex: `/staging/minsaude`), são armazenadas algumas informações: para cada usuário, baixa-se a foto de perfil, comentários para os posts do período especificado, id dada ao usuário, arquivo com informações sobre o usuário coletado e sobre as mídias dos posts coletados.
