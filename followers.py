@@ -16,14 +16,44 @@ import json
 # for follower in profile.get_followers():
 #     print(follower.username)
 
-class DownloadFollowers(object):
+class DownloadFollowers():
+    """
+    Classe para realizar o download de seguidores de uma lista
+    de perfis especificada
+
+    Atributos
+    ---------
+    self.input_json_data = self._get_input_json(filename)
+        self.users_list = self._get_users_list()
+        self.followers_max = self._get_followers_max()
+        self.credentials = {}
+        self.credentials["user"] = self._get_user()
+        self.credentials["passwd"] = self._get_passwd()
+        self.path = self._get_path()
+    input_json_data : dict
+        Dicionário que armazena o .json de entrada
+    followers_max : int
+        Número máximo de seguidores que devem ser baixados por perfil
+    credentials : dict
+        Dicionário que armazena nome de usuário e senha do conta ativa
+        do instagram necessária para realizar a coleta de seguidores
+    path : str
+        Caminho para a pasta onde serão armazenados os arquivos com a lista de seguidores
+
+    Métodos
+    -------
+    download_followers()
+        Itera sobre a lista de perfis que devem ter a lista de seguidores baixada,
+        realiza o download e armazena na pasta da coleta.
+    """
     def __init__(self, filename):
         """
         Inicia o objeto.
 
         Parâmetros
         -----------
-            Nenhum
+            filename : str
+                nome do arquivo de entrada json
         """
         self.input_json_data = self._get_input_json(filename)
         self.users_list = self._get_users_list()
@@ -39,7 +69,8 @@ class DownloadFollowers(object):
 
         Parâmetros
         -----------
-            Nenhum
+            filename : str
+                nome do arquivo de entrada json
         """
         try:
             input_json = filename
@@ -53,17 +84,31 @@ class DownloadFollowers(object):
         return input_json_data
     
     def _get_users_list(self):
+        """
+        Le a lista de perfis que devem ter a lista de seguidores baixada
+        """
         users_list = self.input_json_data["users_to_download_followers"]
         return users_list
 
     def _get_followers_max(self):
+        """
+        Le o numero maximo de seguidores que devem ser lidos de cada perfil
+        """
         followers_max = self.input_json_data["followers_max"]
         return followers_max
 
     def _get_user(self):
+        """
+        Le o nome de usuario da conta necessaria para fazer credenciamento
+        necessario para baixar os seguidores
+        """
         return self.input_json_data["user"]
 
     def _get_passwd(self):
+        """
+        Le a senha da conta necessaria para fazer credenciamento
+        necessario para baixar os seguidores
+        """
         return self.input_json_data["passwd"]
 
 
@@ -82,6 +127,10 @@ class DownloadFollowers(object):
         return path
 
     def download_followers(self):
+        """
+        Itera sobre a lista de perfis que devem ter a lista de seguidores baixada,
+        realiza o download e armazena na pasta da coleta.
+        """
         L = Instaloader()
         try:
             L.login(user=self.credentials["user"],passwd=self.credentials["passwd"])
@@ -97,7 +146,7 @@ class DownloadFollowers(object):
                     for follower in profile.get_followers():
                         if counter == self.followers_max:
                             break
-                        # print(follower.username)s
+
                         f.write(follower.username +"\n")
                         counter = counter + 1
         except Exception as e:
