@@ -1,8 +1,8 @@
 {
   "users": ["anvisaoficial", "minsaude"],
-  "min_date": "2020,5,1",
+  "min_date": "2020,6,7",
   "sleep_time": 1,
   "users_to_download_media": ["anvisaoficial", "minsaude"],
-  "max_comments": 10000,
+  "max_comments": 1000,
   "crawler": "instagram"
 }
