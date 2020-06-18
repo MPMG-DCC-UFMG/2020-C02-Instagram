@@ -49,7 +49,7 @@ Os argumentos são:
 Python3 com os seguintes pacotes nas versões especificadas
 
 Name: instaloader
-Version: 4.2.9
+Version: 4.4.4
 Name: timeout-decorator
 Version: 0.4.1
 
