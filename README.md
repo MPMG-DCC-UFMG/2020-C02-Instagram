@@ -21,6 +21,10 @@ A entrada recebida pelo programa tem o formato:
   "sleep_time": 1,
   "users_to_download_media": ["anvisaoficial", "minsaude"],
   "max_comments": 10000,
+  "users_to_download_followers": ["minsaude", "anvisaoficial"],
+  "followers_max": 14,
+  "user": "XXXXX",
+  "passwd": "XXXXXX",
   "crawler": "instagram"
 }
 
@@ -34,6 +38,10 @@ Os argumentos são:
 - `sleep_time`: Tempo (em segundos) de espera entre coleta de perfis. Caso não for utlizar, definir como `0`.
 - `users_to_download_media`: lista de perfis que terão suas mídias coletadas. Isso significa fazer download dos vídeos e imagens postados na timeline do perfil, dentro do período especificado. Note que este campo deve conter um subconjunto do campo `users`, pois não é possível realizar o download de mídias de perfis que não foram coletados.
 - `max_comments`: máximo de comentários *por post* que devem ser coletados
+- `users_to_download_followers` : Lista de perfis cujas listas de seguidores devem ser coletadas. 
+- `followers_max`: Número máximo de seguidores que serão coletados _por perfil_. Caso queira coletar a lista completa de seguidores, utilizar o valor `null` neste campo.
+- `user`: Nome de usuário da conta ativa do instagram necessária para realizar o credenciamento necessário para realizar download da lista de seguidores
+- `passwd`: Senha da conta ativa do instagram necessária para realizar o credenciamento necessário para realizar download da lista de seguidores
 - `crawler`: deve sempre ter "instagram" como argumento, pois usa um módulo genérico que faz download de mais de uma rede social.
 
 ### Pacotes
@@ -84,7 +92,11 @@ os comentários e informações sobre os posts obtidos pelo instaloader em dois 
 
 ### download_medias.py
 
-Executa por último. Define uma classe que itera pelos posts, faz a requisição de cada uma das mídias (fotos ou vídeos) e salva dentro da pasta _images_ do _archives_ correspondente.
+Define uma classe que itera pelos posts, faz a requisição de cada uma das mídias (fotos ou vídeos) e salva dentro da pasta _images_ do _archives_ correspondente.
+
+### followers.py
+
+Define uma classe que realiza a coleta da lista de seguidores de perfis especificados na entrada.
 
 ## Classes
 
@@ -180,6 +192,36 @@ Algumas classes foram implementadas, suas documentações seguem abaixo:
         funções que agregam comentários, posts, informações
         de perfis
 
+### DownloadFollowers
+
+    Classe para realizar o download de seguidores de uma lista
+    de perfis especificada
+
+    Atributos
+    ---------
+    self.input_json_data = self._get_input_json(filename)
+        self.users_list = self._get_users_list()
+        self.followers_max = self._get_followers_max()
+        self.credentials = {}
+        self.credentials["user"] = self._get_user()
+        self.credentials["passwd"] = self._get_passwd()
+        self.path = self._get_path()
+    input_json_data : dict
+        Dicionário que armazena o .json de entrada
+    followers_max : int
+        Número máximo de seguidores que devem ser baixados por perfil
+    credentials : dict
+        Dicionário que armazena nome de usuário e senha do conta ativa
+        do instagram necessária para realizar a coleta de seguidores
+    path : str
+        Caminho para a pasta onde serão armazenados os arquivos com a lista de seguidores
+
+    Métodos
+    -------
+    download_followers()
+        Itera sobre a lista de perfis que devem ter a lista de seguidores baixada,
+        realiza o download e armazena na pasta da coleta.
+    
 
 ### download_medias
 
