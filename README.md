@@ -9,7 +9,7 @@ Faz download de mídias e comentários de uma lista de perfis, dada uma data de 
 Execute com:
 
 ```
-python3 -B init_crawler.py entrada.json
+python3 -B init_crawler.py W entrada.json
 ```
 
 A entrada recebida pelo programa tem o formato:
@@ -43,6 +43,12 @@ Os argumentos são:
 - `user`: Nome de usuário da conta ativa do instagram necessária para realizar o credenciamento necessário para realizar download da lista de seguidores
 - `passwd`: Senha da conta ativa do instagram necessária para realizar o credenciamento necessário para realizar download da lista de seguidores
 - `crawler`: deve sempre ter "instagram" como argumento, pois usa um módulo genérico que faz download de mais de uma rede social.
+
+Uma outra opção é passar o arquivo json diretamente na chamado do coletor:
+
+```
+python3 -B init_crawler.py J {\"users\": [\"minsaude\"], <...>}
+```
 
 ### Pacotes
 

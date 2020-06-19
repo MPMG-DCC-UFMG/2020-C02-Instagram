@@ -1,6 +1,7 @@
 import sys
 import json
 import os
+import argparse
 from download_medias import download_medias as dm
 from followers import DownloadFollowers as df
 
@@ -36,30 +37,42 @@ class Coletor():
         -----------
             Nenhum
         """
-        self.input_json = self._get_input_json()
+        self._get_input_json()
 
     def _get_input_json(self):
         """
-        Retorna o nome do arquivo .json que será lido via linha de comando
+        Salva no objeto o arquivo .json de entrada.
 
         Parâmetros
         -----------
             Nenhum
         """
         try:
-            input_json = sys.argv[1]
-            print("Name of input file: ", input_json)
+            cmd = sys.argv[1]
+        except:
+            print("No input mode provided. Exiting program...")
+            quit()
+
+        try: 
+            if cmd == 'W':
+                with open(sys.argv[2], "r") as f:
+                    self.input_json = json.load(f)
+            elif cmd == 'J':
+                self.input_json = json.loads(" ".join(sys.argv[2:]))
+            else:
+                print("Input mode not available. Exiting program...")
+                quit()
+            print("Input mode: ", cmd)
         except:
             print("No input file provided. Exiting program...")
             quit()
-        return input_json
 
-    def _create_max_comments_input_file(self, input_json_data, max_comment_file):
+    def _create_max_comments_input_file(self, max_comment_file):
         with open(max_comment_file, "w") as f:
             # print(str(input_json_data["max_comments"]))
-            f.write(str(input_json_data["max_comments"]))
+            f.write(str(self.input_json["max_comments"]))
 
-    def _create_users_input_file(self, input_json_data, aux_users_filename):
+    def _create_users_input_file(self, aux_users_filename):
         """
         Cria um arquivo temporário que armazena os nomes dos perfis que
         devem ser coletados, um por linha. Este arquivo facilita o 
@@ -68,12 +81,10 @@ class Coletor():
         
         Parâmetros
         -----------
-            input_json_data : dict
-                dicionário com as informações do json de entrada
             aux_users_filename: str
                 nome do arquivo temporário que será criado
         """
-        users_list = input_json_data["users"]
+        users_list = self.input_json["users"]
         with open(aux_users_filename, "w") as f:
             for user in users_list:
                 f.write(user+"\n")
@@ -101,7 +112,7 @@ class Coletor():
 
     def _parse_json(self):
         """
-        Realiza a leitura e parsing do .json de entrada, cria e deleta
+        Realiza o parsing do .json de entrada, cria e deleta
         o arquivo temporário com os perfis que devem ser coletados, e 
         inicializa a coleta dos perfis e posts via linha de comando
 
@@ -109,13 +120,10 @@ class Coletor():
         -----------
             Nenhum 
         """
-        with open(self.input_json, "r") as f:
-            input_json_data = json.load(f)
-
-        sleep_time = input_json_data["sleep_time"]
-        min_date = input_json_data["min_date"]
-        self._create_users_input_file(input_json_data, USERS_FILENAME)
-        self._create_max_comments_input_file(input_json_data, MAX_COMMENT_FILE)
+        sleep_time = self.input_json["sleep_time"]
+        min_date = self.input_json["min_date"]
+        self._create_users_input_file(USERS_FILENAME)
+        self._create_max_comments_input_file(MAX_COMMENT_FILE)
         self._init_comandline_crawler(sleep_time, min_date, USERS_FILENAME)
         os.remove(USERS_FILENAME)
         os.remove(MAX_COMMENT_FILE)
@@ -153,7 +161,6 @@ class Coletor():
         self._parse_json()
         self._download_medias()
         self._download_followers()
-
 
 c = Coletor()
 c.init_crawler()

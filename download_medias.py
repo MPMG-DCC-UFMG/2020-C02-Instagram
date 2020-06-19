@@ -98,7 +98,7 @@ class download_medias():
             self.users = None
 
 
-    def __init__(self, filename):
+    def __init__(self, Json):
         """
         Inicia o objeto.
 
@@ -107,9 +107,7 @@ class download_medias():
         filename : str
             Nome do json de entrada.
         """
-        with open(filename, 'r') as f:
-            self.__json = json.load(f)
-
+        self.__json = Json
         self.__get_folder()
         self.__get_data()
         self.__get_path()

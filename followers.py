@@ -46,7 +46,7 @@ class DownloadFollowers():
         Itera sobre a lista de perfis que devem ter a lista de seguidores baixada,
         realiza o download e armazena na pasta da coleta.
     """
-    def __init__(self, filename):
+    def __init__(self, Json):
         """
         Inicia o objeto.
 
@@ -55,7 +55,7 @@ class DownloadFollowers():
             filename : str
                 nome do arquivo de entrada json
         """
-        self.input_json_data = self._get_input_json(filename)
+        self.input_json_data = Json
         self.users_list = self._get_users_list()
         self.followers_max = self._get_followers_max()
         self.credentials = {}
@@ -63,26 +63,6 @@ class DownloadFollowers():
         self.credentials["passwd"] = self._get_passwd()
         self.path = self._get_path()
 
-    def _get_input_json(self, filename):
-        """
-        Retorna o nome do arquivo .json que será lido via linha de comando
-
-        Parâmetros
-        -----------
-            filename : str
-                nome do arquivo de entrada json
-        """
-        try:
-            input_json = filename
-            with open(input_json, "r") as f:
-                input_json_data = json.load(f)
-        except Exception as e:
-            print(e)
-            print("No input file provided. Exiting program...")
-            quit()
-
-        return input_json_data
-    
     def _get_users_list(self):
         """
         Le a lista de perfis que devem ter a lista de seguidores baixada
