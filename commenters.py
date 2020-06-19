@@ -6,7 +6,7 @@ import json
 
 class Commenters():
     def __init__(self):
-        self.input_file = self._get_path()
+        self._get_path()
 
     def _get_user_info_json(self, username):
         L = Instaloader()
@@ -32,6 +32,7 @@ class Commenters():
             except:
                 pass
 
+        commenters = list(set(commenters))
         return commenters
 
     def _get_path(self):
@@ -43,9 +44,9 @@ class Commenters():
 
         # if not os.path.exists("data/archives/"+folder+'/followers'):
         #     os.makedirs("data/archives/"+folder+'/followers')
-        self.output_path = "data/archives/"+folder+"/commenters.json"
-        path = "data/archives/"+folder+'/comments.json'
-        return path
+        self.output_path = "data/archives/"+folder+"/commenters_profiles.json"
+        self.input_file = "data/archives/"+folder+'/comments.json'
+        # return path
 
 
     def aggregate_commenters(self):
