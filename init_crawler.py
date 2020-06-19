@@ -55,19 +55,23 @@ class Coletor():
             print("No input mode provided. Exiting program...")
             quit()
 
-        try: 
-            if cmd == 'W':
-                with open(sys.argv[2], "r") as f:
-                    self.input_json = json.load(f)
-            elif cmd == 'J':
-                self.input_json = json.loads(" ".join(sys.argv[2:]))
-            else:
-                print("Input mode not available. Exiting program...")
-                quit()
-            print("Input mode: ", cmd)
+        try:
+            data = sys.argv[2]
         except:
             print("No input file provided. Exiting program...")
             quit()
+
+        if cmd == 'W':
+            with open(data, "r") as f:
+                self.input_json = json.load(f)
+        elif cmd == 'J':
+            data = data.replace("'", '"')
+            self.input_json = json.loads(data)
+        else:
+            print("Input mode not available. Exiting program...")
+            quit()
+
+        print("Input mode: ", cmd)
 
     def _create_max_comments_input_file(self, max_comment_file):
         with open(max_comment_file, "w") as f:
