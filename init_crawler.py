@@ -4,6 +4,7 @@ import os
 import argparse
 from download_medias import download_medias as dm
 from followers import DownloadFollowers as df
+from hashtags import DownloadHashtags as dh
 
 USERS_FILENAME = "users.txt" # nao alterar
 MAX_COMMENT_FILE = "max_comment_file.txt" # nao alterar
@@ -150,17 +151,24 @@ class Coletor():
         dfollowers = df(self.input_json)
         dfollowers.download_followers()
 
+    def _download_hashtags(self):
+        dhashtags = dh(self.input_json)
+        dhashtags.download_hashtags()
+
     def init_crawler(self):
         """
-        Inicializa a coleta de perfis, posts e mídias.
+        Inicializa a coleta de perfis, posts e mídias, ou de hashtags.
 
         Parâmetros
         -----------
             Nenhum
         """
-        self._parse_json()
-        self._download_medias()
-        self._download_followers()
+        if (self.input_json["download_hashtags"]):
+            self._download_hashtags()
+        else:
+            self._parse_json()
+            self._download_medias()
+            self._download_followers()
 
 c = Coletor()
 c.init_crawler()

@@ -16,17 +16,21 @@ A entrada recebida pelo programa tem o formato:
 
 ```
 {
-  "users": ["anvisaoficial", "minsaude"],
-  "min_date": "2020,5,1",
+  "users": ["anvisaoficial"],
+  "min_date": "2020,6,18",
   "sleep_time": 1,
-  "users_to_download_media": ["anvisaoficial", "minsaude"],
-  "max_comments": 10000,
+  "users_to_download_media": ["anvisaoficial"],
+  "max_comments": 1,
   "users_to_download_followers": ["minsaude", "anvisaoficial"],
   "followers_max": 14,
-  "user": "XXXXX",
-  "passwd": "XXXXXX",
-  "crawler": "instagram"
+  "user": "XXXXXXX",
+  "passwd": "XXXXXXX",
+  "crawler": "instagram",
+  "download_hashtags": true,
+  "hashtags_list": ["testeste", "asasasasas"],
+  "hashtags_max": null
 }
+
 
 
 ```
@@ -42,6 +46,9 @@ Os argumentos são:
 - `followers_max`: Número máximo de seguidores que serão coletados _por perfil_. Caso queira coletar a lista completa de seguidores, utilizar o valor `null` neste campo.
 - `user`: Nome de usuário da conta ativa do instagram necessária para realizar o credenciamento necessário para realizar download da lista de seguidores
 - `passwd`: Senha da conta ativa do instagram necessária para realizar o credenciamento necessário para realizar download da lista de seguidores
+- `download_hashtags`: Deve ser ou "true", caso queira coletar hashtags ou "false", caso contrário.
+- `hashtags_list`: Lista de hashtags que devem ter seus posts coletados,
+- `hashtags_max`: Número máximo de posts que devem ser coletados _por hashtag_. Caso queria coletar todos os posts disponíveis, utilizar este campo com o valor `null`.
 - `crawler`: deve sempre ter "instagram" como argumento, pois usa um módulo genérico que faz download de mais de uma rede social.
 
 Uma outra opção é passar o arquivo json diretamente na chamado do coletor:

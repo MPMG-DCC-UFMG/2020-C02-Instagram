@@ -4,18 +4,6 @@ import sys
 import os
 import json
 
-# input_json = sys.argv[1]
-# with open(self.input_json, "r") as f:
-#             input_json_data = json.load(f)
-# users_list = input_json_data["users_to_download_followers"]
-# followers_max = input_json_data["followers_max"]
-
-# L = Instaloader()
-# L.login(user="testejohndoe",passwd="senhasenha")
-# profile = Profile.from_username(L.context, USERNAME)
-# for follower in profile.get_followers():
-#     print(follower.username)
-
 class DownloadFollowers():
     """
     Classe para realizar o download de seguidores de uma lista
@@ -23,15 +11,10 @@ class DownloadFollowers():
 
     Atributos
     ---------
-    self.input_json_data = self._get_input_json(filename)
-        self.users_list = self._get_users_list()
-        self.followers_max = self._get_followers_max()
-        self.credentials = {}
-        self.credentials["user"] = self._get_user()
-        self.credentials["passwd"] = self._get_passwd()
-        self.path = self._get_path()
     input_json_data : dict
         Dicionário que armazena o .json de entrada
+    users_list : list
+        Lista de usuários que devem ter sua lista de seguidores coletadas
     followers_max : int
         Número máximo de seguidores que devem ser baixados por perfil
     credentials : dict
@@ -131,6 +114,3 @@ class DownloadFollowers():
                         counter = counter + 1
         except Exception as e:
             print(e)
-
-# followers = DownloadFollowers("input/novacoleta.json")
-# followers.download_followers()
