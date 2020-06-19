@@ -5,6 +5,7 @@ import argparse
 from download_medias import download_medias as dm
 from followers import DownloadFollowers as df
 from hashtags import DownloadHashtags as dh
+from commenters import Commenters
 
 USERS_FILENAME = "users.txt" # nao alterar
 MAX_COMMENT_FILE = "max_comment_file.txt" # nao alterar
@@ -155,6 +156,13 @@ class Coletor():
         dhashtags = dh(self.input_json)
         dhashtags.download_hashtags()
 
+    def _download_commenters(self):
+        print("==============================")
+        print("DOWNLOADING COMMENTERS")
+        print("==============================")
+        cc = Commenters()
+        cc.aggregate_commenters()
+
     def init_crawler(self):
         """
         Inicializa a coleta de perfis, posts e mídias, ou de hashtags.
@@ -168,6 +176,7 @@ class Coletor():
         else:
             self._parse_json()
             self._download_medias()
+            self._download_commenters()
             self._download_followers()
 
 c = Coletor()

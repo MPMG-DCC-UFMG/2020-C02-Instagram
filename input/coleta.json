@@ -9,7 +9,7 @@
   "user": "testejohndoe",
   "passwd": "senhasenha",
   "crawler": "instagram",
-  "download_hashtags": true,
+  "download_hashtags": false,
   "hashtags_list": ["testeste", "asasasasas"],
   "hashtags_max": null
 }

@@ -5,8 +5,8 @@ import datetime
 import json
 
 class Commenters():
-    def __init__(self, input_file):
-        self.input_file = input_file
+    def __init__(self):
+        self.input_file = self._get_path()
 
     def _get_user_info_json(self, username):
         L = Instaloader()
@@ -34,10 +34,23 @@ class Commenters():
 
         return commenters
 
+    def _get_path(self):
+        """
+        
+        """
+        folder = str(max([int(x) for x in os.listdir("data/archives")
+            if x != 'staging' and x[0] != '.']))
 
-    def aggregate_commenters(self, output_file):
+        # if not os.path.exists("data/archives/"+folder+'/followers'):
+        #     os.makedirs("data/archives/"+folder+'/followers')
+        self.output_path = "data/archives/"+folder+"/commenters.json"
+        path = "data/archives/"+folder+'/comments.json'
+        return path
+
+
+    def aggregate_commenters(self):
         commenters_list = self._get_users_list(self.input_file)
-        with open(output_file,"w") as f:
+        with open(self.output_path,"w") as f:
             f.write("{\"data\": [")
             for i in range(len(commenters_list)):
                 commenter_info = self._get_user_info_json(commenters_list[i])
@@ -45,9 +58,3 @@ class Commenters():
                 if(i!=len(commenters_list)):
                     f.write(",")
             f.write("]}")
-
-
-path = ''
-
-cc = Commenters(path)
-cc.aggregate_commenters("novasaida.json")
