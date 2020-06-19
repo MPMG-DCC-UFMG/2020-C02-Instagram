@@ -266,6 +266,32 @@ Algumas classes foram implementadas, suas documentações seguem abaixo:
         para baixar as mídias (se pertencerem a um dos usuários
         pré-definidos).
 
+### DownloadHashtags
+
+    Classe para inicializar o coletor. Realiza a leitura da entrada via
+    argumento de linha de comando, e passa para os módulos que coletam 
+    as informações de cada perfil, assim como o download das mídias dos
+    perfis selecionados. 
+
+    Atributos
+    -----------
+    input_json : dict
+         Dicionário com as informações da entrada
+    hashtags_list : list
+         Lista de de hashtags que devem ser coletadas
+    hashtags_max : int
+         Número máximo de posts por hashtag que devem ser coletados
+    time : int
+         Timestamp do horário da coleta. Importante para gerar as 
+         saídas nas pastas corretas
+        
+
+    Métodos
+    -----------
+    download_hashtags()
+        Método que realiza o download de hashtags especificadas na entrada
+
+
 
 ## Arquivos
 
@@ -273,8 +299,11 @@ Algumas classes foram implementadas, suas documentações seguem abaixo:
 
 O código cria uma pasta chamada "data", com uma subpasta "archives:
 
-Dentro de archives, estão as pastas relativas a cada coleta iniciada, nomeadas com o timestamp do fim da coleta em [Unix time](https://en.wikipedia.org/wiki/Unix_time), desprezando os milisegundos. Dessa forma, é possível recuperar a ordem em que as coletas foram feitas, importante para algumas subtarefas do coletor.
+Dentro de archives, estão as pastas relativas a cada coleta iniciada, nomeadas com o timestamp do fim da coleta em [Unix time](https://en.wikipedia.org/wiki/Unix_time), desprezando os milisegundos. Dessa forma, é possível recuperar a ordem em que as coletas foram feitas, importante para organizar os arquivos coletados.
 
+O coletor permite, ou a coleta de perfis, posts e comentários, ou a coleta de hashtags (palavras-chave):
+
+#### Posts, perfis, comentários, seguidores e mídias:
 Dentro de uma pasta de coleta, temos arquivos sobre os comentários (comments.json) e mídias (medias.json) de toda a coleta, compilados. Além disso, temos as pastas:
 
 - Pasta staging: Separa os perfis em pastas, com um json específico para para os comentários daquele perfil, assim como um json para cada post coletado (o nome do arquivo corresponde ao timestamp de postagem)
@@ -302,3 +331,6 @@ Dentro da pasta de um usuário (ex: `/staging/minsaude`), são armazenadas algum
 - parent_comment_id: se o comentário é uma resposta a outro, identifica qual o comentário original utilizando sua ID
 
 **Arquivo de Informações do Perfil**: Tem formato `$USERNAME_$ID.json` e tem informações gerais sobre o perfil coletado.
+
+#### Hashtags (Palavras-chave)
+Dentro de uma pasta de coleta de hashtags, são criadas pastas para cada hashtag coletadas. Dentro da pasta de uma hashtag (ex: 'tbt'), temos arquivos com informações dos posts, as mídias de cada um, além de arquivo separado com o texto principal de cada postagem.
