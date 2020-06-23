@@ -60,7 +60,7 @@ Os argumentos são:
 Uma outra opção é passar o arquivo json diretamente na chamado do coletor:
 
 ```
-python3 -B init_crawler.py J {\"users\": [\"minsaude\"], <...>}
+python3 -B init_crawler.py J "{'users': ['minsaude'], <...>}"
 ```
 
 ### Pacotes
@@ -116,6 +116,10 @@ Define uma classe que itera pelos posts, faz a requisição de cada uma das míd
 ### followers.py
 
 Define uma classe que realiza a coleta da lista de seguidores de perfis especificados na entrada.
+
+### utils.py
+
+Arquivo de funções auxiliares: extract\_files é responsável por extrair os arquivos comprimidos obtidos da coleta.
 
 ## Classes
 
