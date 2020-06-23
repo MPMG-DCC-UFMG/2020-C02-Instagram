@@ -6,6 +6,7 @@ from download_medias import download_medias as dm
 from followers import DownloadFollowers as df
 from hashtags import DownloadHashtags as dh
 from commenters import Commenters
+from utils import extract_files as ef
 
 USERS_FILENAME = "users.txt" # nao alterar
 MAX_COMMENT_FILE = "max_comment_file.txt" # nao alterar
@@ -182,6 +183,8 @@ class Coletor():
             self._download_medias()
             self._download_commenters()
             self._download_followers()
+
+        ef("data")
 
 c = Coletor()
 c.init_crawler()
