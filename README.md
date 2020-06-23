@@ -321,6 +321,8 @@ Dentro da pasta de um usuário (ex: `/staging/minsaude`), são armazenadas algum
 
 **Arquivos de Mídias**: Cada arquivo tem como título a timestamp de postagem do post coletado. Compreende informações sobre as mídias, bio do dono do post e algumas informações adicionais.
 
+**Arquivo de texto principal do post**: Para um mesmo post, seu arquivo de mídias e seu arquivo de texto principal do post possuem a mesma nomenclatura: timestamp de postagem. No caso do texto principal do post, este é armazenado em um arquivo .txt
+
 **Arquivo de Comentários**: Tem formato `comments_$USERNAME.json` e contêm todos os comentários dos posts coletados. Cada comentário tem os campos:
 
 - text: texto do comentário
