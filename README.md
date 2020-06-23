@@ -6,6 +6,12 @@ Coleta perfis com utilizando [instaloader](https://instaloader.github.io/) e arm
 
 Faz download de mídias e comentários de uma lista de perfis, dada uma data de início para a coleta
 
+Clone este repositório com o comando:
+
+```
+git clone https://github.com/MPMG-DCC-UFMG/C02-Instagram
+```
+
 Execute com:
 
 ```
@@ -41,8 +47,8 @@ Os argumentos são:
 - `min_date`: Data de início da coleta. O default é ontem, caso uma data não seja específicada. O formato da data deve ser `YYYY,MM,DD`, sem zeros à esquerda. Exemplo: 20/03/2020, deve-se _remover_ os zeros à esquerda, da seguinte forma: 2020,3,20
 - `sleep_time`: Tempo (em segundos) de espera entre coleta de perfis. Caso não for utlizar, definir como `0`.
 - `users_to_download_media`: lista de perfis que terão suas mídias coletadas. Isso significa fazer download dos vídeos e imagens postados na timeline do perfil, dentro do período especificado. Note que este campo deve conter um subconjunto do campo `users`, pois não é possível realizar o download de mídias de perfis que não foram coletados.
-- `max_comments`: máximo de comentários *por post* que devem ser coletados
-- `users_to_download_followers` : Lista de perfis cujas listas de seguidores devem ser coletadas. 
+- `max_comments`: máximo de comentários _por post_ que devem ser coletados
+- `users_to_download_followers` : Lista de perfis cujas listas de seguidores devem ser coletadas.
 - `followers_max`: Número máximo de seguidores que serão coletados _por perfil_. Caso queira coletar a lista completa de seguidores, utilizar o valor `null` neste campo.
 - `user`: Nome de usuário da conta ativa do instagram necessária para realizar o credenciamento necessário para realizar download da lista de seguidores
 - `passwd`: Senha da conta ativa do instagram necessária para realizar o credenciamento necessário para realizar download da lista de seguidores
@@ -67,7 +73,7 @@ Name: timeout-decorator
 Version: 0.4.1
 
 ```
-pip3 install -r requirements.txt 
+pip3 install -r requirements.txt
 ```
 
 Se utilizar o Anaconda, pode ser que haja algum problema com a instalação do timeout-decorator. Melhor usar o PIP para instalar os pacotes
@@ -234,7 +240,6 @@ Algumas classes foram implementadas, suas documentações seguem abaixo:
     download_followers()
         Itera sobre a lista de perfis que devem ter a lista de seguidores baixada,
         realiza o download e armazena na pasta da coleta.
-    
 
 ### download_medias
 
@@ -269,9 +274,9 @@ Algumas classes foram implementadas, suas documentações seguem abaixo:
 ### DownloadHashtags
 
     Classe para inicializar o coletor. Realiza a leitura da entrada via
-    argumento de linha de comando, e passa para os módulos que coletam 
+    argumento de linha de comando, e passa para os módulos que coletam
     as informações de cada perfil, assim como o download das mídias dos
-    perfis selecionados. 
+    perfis selecionados.
 
     Atributos
     -----------
@@ -282,16 +287,14 @@ Algumas classes foram implementadas, suas documentações seguem abaixo:
     hashtags_max : int
          Número máximo de posts por hashtag que devem ser coletados
     time : int
-         Timestamp do horário da coleta. Importante para gerar as 
+         Timestamp do horário da coleta. Importante para gerar as
          saídas nas pastas corretas
-        
+
 
     Métodos
     -----------
     download_hashtags()
         Método que realiza o download de hashtags especificadas na entrada
-
-
 
 ## Arquivos
 
@@ -304,6 +307,7 @@ Dentro de archives, estão as pastas relativas a cada coleta iniciada, nomeadas 
 O coletor permite, ou a coleta de perfis, posts e comentários, ou a coleta de hashtags (palavras-chave):
 
 #### Posts, perfis, comentários, seguidores e mídias:
+
 Dentro de uma pasta de coleta, temos arquivos sobre os comentários (comments.json) e mídias (medias.json) de toda a coleta, compilados. Além disso, temos as pastas:
 
 - Pasta staging: Separa os perfis em pastas, com um json específico para para os comentários daquele perfil, assim como um json para cada post coletado (o nome do arquivo corresponde ao timestamp de postagem)
@@ -333,4 +337,5 @@ Dentro da pasta de um usuário (ex: `/staging/minsaude`), são armazenadas algum
 **Arquivo de Informações do Perfil**: Tem formato `$USERNAME_$ID.json` e tem informações gerais sobre o perfil coletado.
 
 #### Hashtags (Palavras-chave)
+
 Dentro de uma pasta de coleta de hashtags, são criadas pastas para cada hashtag coletadas. Dentro da pasta de uma hashtag (ex: 'tbt'), temos arquivos com informações dos posts, as mídias de cada um, além de arquivo separado com o texto principal de cada postagem.
