@@ -117,9 +117,13 @@ Define uma classe que itera pelos posts, faz a requisição de cada uma das míd
 
 Define uma classe que realiza a coleta da lista de seguidores de perfis especificados na entrada.
 
+### hashtags.py
+
+Define uma classe para realizar coleta de posts que contenham uma hashtag
+
 ### utils.py
 
-Arquivo de funções auxiliares: extract\_files é responsável por extrair os arquivos comprimidos obtidos da coleta.
+Arquivo de funções auxiliares: extract_files é responsável por extrair os arquivos comprimidos obtidos da coleta.
 
 ## Classes
 
