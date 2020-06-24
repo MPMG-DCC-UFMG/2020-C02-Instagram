@@ -15,7 +15,7 @@ git clone https://github.com/MPMG-DCC-UFMG/C02-Instagram
 Execute com:
 
 ```
-python3 -B init_crawler.py W entrada.json
+python3 -B init_crawler.py --json entrada.json
 ```
 
 A entrada recebida pelo programa para a coleta de posts por perfis tem o formato:
@@ -77,7 +77,7 @@ Os argumentos são:
 Uma outra opção é passar o arquivo json diretamente na chamado do coletor:
 
 ```
-python3 -B init_crawler.py J "{'users': ['minsaude'], <...>}"
+python3 -B init_crawler.py "{'users': ['minsaude'], <...>}"
 ```
 
 ### Pacotes
