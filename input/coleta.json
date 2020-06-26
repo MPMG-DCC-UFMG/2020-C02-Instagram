@@ -1,15 +1,15 @@
 {
-  "users": ["anvisaoficial", "minsaude"],
-  "min_date": "2020,6,23",
+  "users": ["minsaude", "anvisaoficial"],
+  "min_date": "2020,6,25",
   "sleep_time": 1,
-  "users_to_download_media": ["anvisaoficial", "minsaude"],
-  "max_comments": 1,
+  "users_to_download_media": ["minsaude", "anvisaoficial"],
+  "max_comments": 10,
   "users_to_download_followers": ["minsaude", "anvisaoficial"],
   "followers_max": 14,
   "user": "testejohndoe",
   "passwd": "senhasenha",
   "crawler": "instagram",
-  "download_hashtags": true,
+  "download_hashtags": false,
   "hashtags_list": ["testeste", "asasasasas"],
   "hashtags_max": 2
 }
