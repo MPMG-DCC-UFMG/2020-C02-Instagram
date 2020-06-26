@@ -59,3 +59,5 @@ class Commenters():
                 if(i!=len(commenters_list)-1):
                     f.write(",")
             f.write("]}")
+        print("Removing comments.json")
+        os.system("rm "+str(self.input_file))

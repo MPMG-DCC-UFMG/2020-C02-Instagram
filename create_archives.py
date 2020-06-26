@@ -221,33 +221,30 @@ class CreateArchives():
             .strftime('%Y-%m-%d %H:%M:%S')
         print(json.dumps(periodic_media) + ",", file=out_medias_periodic)
 
-    def _parse_medias(self, fo_medias, fo_medias_periodic):
+    def _parse_medias(self, fo_medias):
         """
         Itera sobre os .json de mídias de cada perfil e faz 
-        a chamada para as funções de parsing de "medias" e "medias_periodic"
+        a chamada para as funções de parsing de "medias"
 
         Parâmetros
         ----------
         fo_medias : file
             arquivo de saída onde serão armazenadas as informações do
             tipo "media"
-        fo_medias_periodic : file
-            arquivo de saída onde serão armazenadas as informações do
-            tipo "periodic_media"
         """
         print("{\"data\": [", file=fo_medias)
-        print("{\"data\": [", file=fo_medias_periodic)
+        # print("{\"data\": [", file=fo_medias_periodic)
         for f in glob.glob("{}/*/*.json.xz".format(self.INPUT_DIR)):
             try:
                 if "UTC" in f:
                     my_post = self._parse_archive_medias(f, fo_medias)
-                    self._parse_archive_periodic_media(
-                        my_post, fo_medias_periodic)
+                    # self._parse_archive_periodic_media(
+                    #     my_post, fo_medias_periodic)
 
             except Exception as e:
                 print(self._now_str(), "Error in file:", f, "Error:", e)
         print("{}]}", file=fo_medias)
-        print("{}]}", file=fo_medias_periodic)
+        # print("{}]}", file=fo_medias_periodic)
 
     def create_archives(self):
         """
@@ -264,16 +261,16 @@ class CreateArchives():
               "data/archives/{}".format(self.TIME))
         # perfis e midias
         fo_medias = open(OUT_ARCHIVE_MEDIAS, "w")
-        fo_medias_periodic = open(OUT_ARCHIVE_MEDIAS_PERIODIC, "w")
-        fo_profiles_periodic = open(OUT_ARCHIVE_PROFILES_PERIODIC, "w")
+        # fo_medias_periodic = open(OUT_ARCHIVE_MEDIAS_PERIODIC, "w")
+        # fo_profiles_periodic = open(OUT_ARCHIVE_PROFILES_PERIODIC, "w")
 
-        self._parse_medias(fo_medias, fo_medias_periodic)
-        self._aggregate_profiles(fo_profiles_periodic)
+        self._parse_medias(fo_medias)
+        # self._aggregate_profiles(fo_profiles_periodic)
         self._aggregate_comments(OUT_ARCHIVE_COMMENTS)
 
         fo_medias.close()
-        fo_medias_periodic.close()
-        fo_profiles_periodic.close()
+        # fo_medias_periodic.close()
+        # fo_profiles_periodic.close()
 
 
 INPUT_DIR = "data/staging"

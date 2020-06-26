@@ -104,13 +104,13 @@ class DownloadFollowers():
                 if self.followers_max == None: #se nao for dado valor maximo, coleta todos os seguidores
                     self.followers_max = profile.followers
                 print("Downloading "+str(self.followers_max)+" followers of: ", user)
-                with open(self.path+"followers_"+str(user)+".txt", "w") as f:
+                with open(self.path+"followers_"+str(user)+".json", "w") as f:
                     counter = 0
                     for follower in profile.get_followers():
                         if counter == self.followers_max:
                             break
 
-                        f.write(follower.username +"\n")
+                        f.write("{\"user\":\""+str(user)+"\",\"follower\":\""+str(follower.username) +"\"}\n")
                         counter = counter + 1
         except Exception as e:
             print(e)
