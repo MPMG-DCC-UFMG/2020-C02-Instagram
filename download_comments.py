@@ -153,6 +153,7 @@ class DownloadComments():
         my_comment["id"] = str(comment.id)
         my_comment["owner_username"] = comment.owner.username
         my_comment["owner_id"] = str(comment.owner.userid)
+        my_comment["parent_comment_id"] = None
 
         text = my_comment['text']
         tags = {tag.strip("#").strip(',<.>/?;:\'"[{]}\\|=+`~!@#$%^&*()').lower()
