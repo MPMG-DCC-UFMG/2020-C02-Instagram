@@ -54,6 +54,6 @@ class Commenters():
         with open(self.output_path,"w") as f:
             for i in range(len(commenters_list)):
                 commenter_info = self._get_user_info_json(commenters_list[i])
-                f.write(commenter_info)
+                f.write(commenter_info+"\n")
         print("Removing comments.json")
         os.system("rm "+str(self.input_file))
