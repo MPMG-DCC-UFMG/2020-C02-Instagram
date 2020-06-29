@@ -155,10 +155,11 @@ class Coletor():
             if not os.path.exists(output):
                 os.makedirs(output)
             for post in os.listdir(folder + profile):
+                name = folder+post
                 if post[:n] == profile:
-                    os.rename(post, "perfil_"+post)
+                    os.rename(name, folder+"perfil_"+post)
                 elif post[-3:] != "jpg":
-                    os.rename(post, output+post)
+                    os.rename(name, output+post)
 
 
     def _download_followers(self):
