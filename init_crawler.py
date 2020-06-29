@@ -155,9 +155,9 @@ class Coletor():
             if not os.path.exists(output):
                 os.makedirs(output)
             for post in os.listdir(folder + profile):
-                name = folder+post
+                name = folder+profile+"/"+post
                 if post[:n] == profile:
-                    os.rename(name, folder+"perfil_"+post)
+                    os.rename(name, folder+profile+"/perfil_"+post)
                 elif post[-3:] != "jpg":
                     os.rename(name, output+post)
 
