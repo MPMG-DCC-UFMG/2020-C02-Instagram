@@ -81,7 +81,7 @@ class download_medias():
                     if post[-3:] == "txt":
                         continue
                     with open(folder+post, 'r') as f:
-                        data = json.load(f)['data']
+                        data = json.load(f)['node']
                         self.data.append((data, output))
 
         try:
@@ -185,7 +185,7 @@ class download_medias():
             existirem)
         """
         try:
-            post = post_tuple[0]['node']
+            post = post_tuple[0]
             path = post_tuple[1] + post['id']
             if self.users is None or post['owner']['username'] in self.users:
                 if post["__typename"] == "GraphSidecar":
