@@ -52,12 +52,8 @@ class Commenters():
     def aggregate_commenters(self):
         commenters_list = self._get_users_list(self.input_file)
         with open(self.output_path,"w") as f:
-            f.write("{\"data\": [")
             for i in range(len(commenters_list)):
                 commenter_info = self._get_user_info_json(commenters_list[i])
                 f.write(commenter_info)
-                if(i!=len(commenters_list)-1):
-                    f.write(",")
-            f.write("]}")
         print("Removing comments.json")
         os.system("rm "+str(self.input_file))

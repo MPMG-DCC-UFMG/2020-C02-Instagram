@@ -196,8 +196,13 @@ class Coletor():
             self._download_hashtags()
         else:
             self._parse_json()
-            self._download_commenters()
             self._download_followers()
+            try:
+                self._download_commenters()
+            except Exception as e:
+                print("Nao foi possivel coletar todos os commenters...")
+                print(e)
+                pass
             self._arrange()
 
         ef("data")
