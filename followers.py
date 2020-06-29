@@ -84,8 +84,8 @@ class DownloadFollowers():
         folder = str(max([int(x) for x in os.listdir("data/archives")
             if x != 'staging' and x[0] != '.']))
 
-        if not os.path.exists("data/archives/"+folder+'/followers'):
-            os.makedirs("data/archives/"+folder+'/followers')
+        # if not os.path.exists("data/archives/"+folder+'/followers'):
+        #     os.makedirs("data/archives/"+folder+'/followers')
         path = "data/archives/"+folder+'/staging/'
         return path
 

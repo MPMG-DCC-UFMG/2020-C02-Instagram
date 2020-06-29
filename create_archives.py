@@ -260,15 +260,15 @@ class CreateArchives():
         print(self._now_str(), "Creating archives at:",
               "data/archives/{}".format(self.TIME))
         # perfis e midias
-        fo_medias = open(OUT_ARCHIVE_MEDIAS, "w")
+        # fo_medias = open(OUT_ARCHIVE_MEDIAS, "w")
         # fo_medias_periodic = open(OUT_ARCHIVE_MEDIAS_PERIODIC, "w")
         # fo_profiles_periodic = open(OUT_ARCHIVE_PROFILES_PERIODIC, "w")
 
-        self._parse_medias(fo_medias)
+        # self._parse_medias(fo_medias)
         # self._aggregate_profiles(fo_profiles_periodic)
         self._aggregate_comments(OUT_ARCHIVE_COMMENTS)
 
-        fo_medias.close()
+        # fo_medias.close()
         # fo_medias_periodic.close()
         # fo_profiles_periodic.close()
 
