@@ -73,7 +73,7 @@ class download_medias():
             self.data = list()
             path = self.folder + "/staging/"
             for profile in os.listdir(path):
-                output = self.folder + profile + '/medias/'
+                output = path + profile + '/medias/'
                 if not os.path.exists(output):
                     os.makedirs(output)
                 folder = path + profile + "/posts/"
