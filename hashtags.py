@@ -66,15 +66,25 @@ class DownloadHashtags():
       """
       L = Instaloader()
       for hs in self.hashtags_list:
-         hashtag = Hashtag.from_name(L.context, hs)
-         post_counter = 0
-         for post in hashtag.get_posts():
-            L.download_post(post, target=hashtag.name)
-            post_counter = post_counter + 1
-            if self.hashtags_max != None:
-               if post_counter == self.hashtags_max:
-                  break
-               
-         print("Downloaded ", post_counter," from ",hashtag.name)
-         os.rename(hashtag.name,self._get_path()+hashtag.name)
-      
+         try:
+            hashtag = Hashtag.from_name(L.context, hs)
+            post_counter = 0
+            for post in hashtag.get_posts():
+               L.download_post(post, target=hashtag.name)
+               post_counter = post_counter + 1
+               if self.hashtags_max != None:
+                  if post_counter == self.hashtags_max:
+                     break  
+            print("Downloaded ", post_counter," from ",hashtag.name)
+         except Exception as e:
+            print("Nao foi possivel baixar todos os posts da tag: ",hs)
+            print("Dica: Tente coletar menos posts por hashtag")
+            print(e)
+
+
+      for hs in self.hashtags_list:
+         try:
+            os.rename(hs,self._get_path()+hs)
+         except Exception as e:
+            print("Erro ao mover arquivos da hashtag: ", hs)
+            print(e)
