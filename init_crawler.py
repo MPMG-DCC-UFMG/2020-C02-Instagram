@@ -160,7 +160,8 @@ class Coletor():
                     os.rename(name, folder+profile+"/perfil_"+post)
                 elif post[-3:] != "jpg" \
                     and post[:8] != "comments" \
-                    and not os.path.isdir(name):
+                    and not os.path.isdir(name) \
+                    and post != "id":
                     os.rename(name, output+post)
 
 
