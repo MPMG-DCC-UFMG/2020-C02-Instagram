@@ -161,7 +161,8 @@ class Coletor():
                 elif post[-3:] != "jpg" \
                     and post[:8] != "comments" \
                     and not os.path.isdir(name) \
-                    and post != "id":
+                    and post != "id" \
+                    and post[:9] != "followers":
                     os.rename(name, output+post)
 
 

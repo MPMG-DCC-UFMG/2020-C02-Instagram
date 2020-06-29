@@ -189,7 +189,7 @@ class download_medias():
             path = post_tuple[1] + post['id']
             if self.users is None or post['owner']['username'] in self.users:
                 if post["__typename"] == "GraphSidecar":
-                    _post = self.__get_post(post["short_code"])
+                    _post = self.__get_post(post["shortcode"])
                     photos = _post.get_sidecar_nodes()
                     idx = 1
                     for img in photos:
@@ -202,7 +202,7 @@ class download_medias():
                 else:
                     if post['is_video']:
                         filename = path + '.mp4' 
-                        _post = self.__get_post(post["short_code"])
+                        _post = self.__get_post(post["shortcode"])
                         url = _post.video_url
                     else:
                         filename = path + '.jpg' 
