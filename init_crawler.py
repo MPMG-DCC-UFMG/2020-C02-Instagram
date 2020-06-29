@@ -197,9 +197,11 @@ class Coletor():
             self._download_commenters()
             self._download_followers()
             self._arrange()
-            self._download_medias()
 
         ef("data")
+        
+        if not (self.input_json["download_hashtags"]):
+            self._download_medias()
 
 c = Coletor()
 c.init_crawler()
