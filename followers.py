@@ -86,7 +86,7 @@ class DownloadFollowers():
 
         if not os.path.exists("data/archives/"+folder+'/followers'):
             os.makedirs("data/archives/"+folder+'/followers')
-        path = "data/archives/"+folder+'/followers/'
+        path = "data/archives/"+folder+'/staging/'
         return path
 
     def download_followers(self):
@@ -104,7 +104,7 @@ class DownloadFollowers():
                 if self.followers_max == None: #se nao for dado valor maximo, coleta todos os seguidores
                     self.followers_max = profile.followers
                 print("Downloading "+str(self.followers_max)+" followers of: ", user)
-                with open(self.path+"followers_"+str(user)+".json", "w") as f:
+                with open(self.path+str(user)+"/followers_"+str(user)+".json", "w") as f:
                     counter = 0
                     for follower in profile.get_followers():
                         if counter == self.followers_max:
