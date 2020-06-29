@@ -134,19 +134,32 @@ class Coletor():
         os.remove(MAX_COMMENT_FILE)
 
     def _download_medias(self):
-        """
-        Coleta as mídias dos perfis marcados no json de entrada. Utiliza 
-        um objeto de classe DownloadMedias para realizar a tarefa
-
-        Parâmetros
-        -----------
-            Nenhum
-        """
         print("==============================")
         print("DOWNLOADING MEDIAS")
         print("==============================")
         download_photo = dm(self.input_json)
         download_photo.download(verbose=True)
+
+    def _arrange(self):
+        print("==============================")
+        print("MOVING POSTS")
+        print("==============================")
+
+        folder = "data/archives/"
+        folder += str(max([int(x) for x in os.listdir(folder)
+            if x != 'staging' and x[0] != '.']))
+        folder += "/staging/"
+        for profile in os.listdir(folder):
+            n = len(profile)
+            output = folder + profile + '/posts/'
+            if not os.path.exists(output):
+                os.makedirs(output)
+            for post in os.listdir(folder + profile):
+                if post[:n] == profile:
+                    os.rename(post, "perfil_"+post)
+                elif post[-3:] != "jpg":
+                    os.rename(post, output+post)
+
 
     def _download_followers(self):
         print("==============================")
@@ -178,9 +191,10 @@ class Coletor():
             self._download_hashtags()
         else:
             self._parse_json()
-            self._download_medias()
             self._download_commenters()
             self._download_followers()
+            self._arrange()
+            self._download_medias()
 
         ef("data")
 

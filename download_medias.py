@@ -40,7 +40,8 @@ class download_medias():
         Encontra a pasta padrão de coleta do instagram caso arquivo
         de entrada ou pasta de saída não forem fornecidos
         """
-        self.folder = str(max([int(x) for x in os.listdir("data/archives")
+        self.folder = "data/archives/"
+        self.folder += str(max([int(x) for x in os.listdir(self.folder)
             if x != 'staging' and x[0] != '.']))
 
 
@@ -48,6 +49,10 @@ class download_medias():
         """
         Guarda em memória a lista de posts gerados pela coleta
         (seja de Instagram ou Twitter).
+
+        Guarda o nome do diretório destino das mídias.
+        Verifica se foi especificado ou se devemos usar a pasta
+        padrão do Instagram.
 
         Levanta
         -------
@@ -58,33 +63,31 @@ class download_medias():
         """
         try:
             out = self.__json['output']
-        except:
-            out = 'data/archives/' + self.folder + '/medias.json'
-
-        with open(out, 'r') as f:
-            output_json = json.load(f)
-
-        try:
-            self.is_twitter = self.__json['crawler'] == 'twitter'
-            self.data = output_json['data']
-        except:
-            raise Exception("Arquivo não compatível.")
-
-
-    def __get_path(self):
-        """
-        Guarda o nome do diretório destino das mídias.
-        Verifica se foi especificado ou se devemos usar a pasta
-        padrão do Instagram.
-        """
-        try: 
+            with open(out, 'r') as f:
+                self.data = json.load(f)['data']
+            
             self.path = self.__json['output_media']
             if self.path[-1] != '/':
                 self.path += '/'
         except:
-            if not os.path.exists("data/archives/"+self.folder+'/images'):
-                os.makedirs("data/archives/"+self.folder+'/images')
-            self.path = "data/archives/"+self.folder+'/images/'
+            self.data = list()
+            path = self.folder + "/staging/"
+            for profile in os.listdir(path):
+                output = self.folder + profile + '/medias/'
+                if not os.path.exists(output):
+                    os.makedirs(output)
+                folder = path + profile + "/posts/"
+                for post in os.listdir(folder):
+                    if post[-3:] == "txt":
+                        continue
+                    with open(folder+post, 'r') as f:
+                        data = json.load(f)['data']
+                        self.data.append((data, output))
+
+        try:
+            self.is_twitter = self.__json['crawler'] == 'twitter'
+        except:
+            raise Exception("Arquivo não compatível.")
 
 
     def __get_users(self):
@@ -110,7 +113,6 @@ class download_medias():
         self.__json = Json
         self.__get_folder()
         self.__get_data()
-        self.__get_path()
         self.__get_users()
 
     
@@ -171,7 +173,7 @@ class download_medias():
         return instaloader.Post.from_shortcode(iloader.context, code)
 
 
-    def __instagram(self, post):
+    def __instagram(self, post_tuple):
         """
         Baixa as mídias de um dado post no instagram, se for de um
         usuário em users.
@@ -183,8 +185,9 @@ class download_medias():
             existirem)
         """
         try:
-            path = self.path + post['id']
-            if self.users is None or post['owner_username'] in self.users:
+            post = post_tuple[0]['node']
+            path = post_tuple[1] + post['id']
+            if self.users is None or post['owner']['username'] in self.users:
                 if post["__typename"] == "GraphSidecar":
                     _post = self.__get_post(post["short_code"])
                     photos = _post.get_sidecar_nodes()
