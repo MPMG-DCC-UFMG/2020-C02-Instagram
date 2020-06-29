@@ -206,7 +206,7 @@ class download_medias():
                         url = _post.video_url
                     else:
                         filename = path + '.jpg' 
-                        url = post['image_url']
+                        url = post['display_url']
                     
                     self.__request(filename, url)
 
