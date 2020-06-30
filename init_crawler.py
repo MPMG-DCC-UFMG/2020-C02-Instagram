@@ -94,7 +94,7 @@ class Coletor():
             for user in users_list:
                 f.write(user+"\n")
 
-    def _init_comandline_crawler(self, sleep_time, min_date, aux_users_filename):
+    def _init_comandline_crawler(self, sleep_time, min_date, aux_users_filename, username, password):
         """
         Cria a string do comando para terminal que inicializa o coletor de perfis
         e posts. Como o parâmetro sleep_time é opcional, o adiciona quando necessário
@@ -109,10 +109,12 @@ class Coletor():
             nome do arquivo temporário criado com os nomes dos perfis que serão coletados
         """
         command = "./run_crawl.sh -p " + \
-            str(aux_users_filename)+" -d " + str(min_date)
+            str(aux_users_filename)+" -d " + str(min_date) \
+            + " -u " + str(username) + " -w " + str(password)
         if(sleep_time is not None):
             command = command + " -t " + str(sleep_time)
 
+        print(command)
         os.system(command)
 
     def _parse_json(self):
@@ -127,9 +129,11 @@ class Coletor():
         """
         sleep_time = self.input_json["sleep_time"]
         min_date = self.input_json["min_date"]
+        username = self.input_json["user"]
+        password = self.input_json["passwd"]
         self._create_users_input_file(USERS_FILENAME)
         self._create_max_comments_input_file(MAX_COMMENT_FILE)
-        self._init_comandline_crawler(sleep_time, min_date, USERS_FILENAME)
+        self._init_comandline_crawler(sleep_time, min_date, USERS_FILENAME, username, password)
         os.remove(USERS_FILENAME)
         os.remove(MAX_COMMENT_FILE)
 

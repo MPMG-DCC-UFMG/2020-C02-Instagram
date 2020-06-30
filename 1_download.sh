@@ -10,7 +10,7 @@ OUTDIR="data/staging"
 if [ $USERNAME == "none" ] ; then
     LOGIN=""
 else
-    LOGIN="--login $USERNAME --password $PASSWORD --sessionfile ./data/session"
+    LOGIN="--login $USERNAME --password $PASSWORD --sessionfile ./data/session" 
 fi
 
 mkdir -p $OUTDIR
@@ -26,11 +26,10 @@ while read profile; do
 
         echo "[$(date +'%Y-%m-%d %H:%M:%S')] Downloading $profile"
 
-        instaloader $profile  $LOGIN    --no-pictures \
-                                        --no-videos \
-                                        --no-video-thumbnails \
-                                        --post-filter="date_utc >= datetime($MIN_DATE)" \
+        instaloader                     --post-filter="date_utc >= datetime($MIN_DATE)"\
                                         --dirname-pattern="$OUTDIR/{profile}" \
+                                        $profile --no-pictures --no-videos\
+                                        $LOGIN\       
                                         > /tmp/instaloader_output_$profile 2>&1 &
 
         PID=$!
