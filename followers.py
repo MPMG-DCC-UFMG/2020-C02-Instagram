@@ -110,7 +110,7 @@ class DownloadFollowers():
                         if counter == self.followers_max:
                             break
 
-                        f.write("{\"user\":\""+str(user)+"\",\"follower\":\""+str(follower.username) +"\"}\n")
+                        f.write("{\"usuario\":\""+str(user)+"\",\"follower\":\""+str(follower.username) +"\"}\n")
                         counter = counter + 1
         except Exception as e:
             print(e)

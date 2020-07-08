@@ -1,15 +1,19 @@
 from instaloader import Instaloader
 from instaloader import Profile
 import os
+import sys
 import datetime
 import json
+
 
 class Commenters():
     def __init__(self):
         self._get_path()
 
-    def _get_user_info_json(self, username):
-        L = Instaloader()
+    def _get_user_info_json(self, username, username_login, password):
+        L = Instaloader(quiet=True)
+        L.load_session_from_file(username_login, filename="data/session ")
+
         profile = Profile.from_username(L.context, username)
         profile_info = {}
         profile_info["username"] = profile.username
@@ -49,11 +53,11 @@ class Commenters():
         # return path
 
 
-    def aggregate_commenters(self):
+    def aggregate_commenters(self, username_login, password):
         commenters_list = self._get_users_list(self.input_file)
         with open(self.output_path,"w") as f:
             for i in range(len(commenters_list)):
-                commenter_info = self._get_user_info_json(commenters_list[i])
+                commenter_info = self._get_user_info_json(commenters_list[i], username_login, password)
                 f.write(commenter_info+"\n")
         print("Removing comments.json")
         os.system("rm "+str(self.input_file))

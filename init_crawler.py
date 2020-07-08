@@ -181,12 +181,12 @@ class Coletor():
         dhashtags = dh(self.input_json)
         dhashtags.download_hashtags()
 
-    def _download_commenters(self):
+    def _download_commenters(self, username_login, password):
         print("==============================")
         print("DOWNLOADING COMMENTERS")
         print("==============================")
         cc = Commenters()
-        cc.aggregate_commenters()
+        cc.aggregate_commenters(username_login, password)
 
     def init_crawler(self):
         """
@@ -202,7 +202,9 @@ class Coletor():
             self._parse_json()
             self._download_followers()
             try:
-                self._download_commenters()
+                username = self.input_json["user"]
+                password = self.input_json["passwd"]
+                self._download_commenters(username,password)
             except Exception as e:
                 print("Nao foi possivel coletar todos os commenters...")
                 print(e)
