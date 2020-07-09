@@ -2,6 +2,7 @@ import sys
 import json
 import os
 import argparse
+import json_flatten as jf
 from download_medias import download_medias as dm
 from followers import DownloadFollowers as df
 from hashtags import DownloadHashtags as dh
@@ -169,6 +170,32 @@ class Coletor():
                     and post[:9] != "followers":
                     os.rename(name, output+post)
 
+    def _flatten(self):
+        print("==============================")
+        print("FLATTENING JSON")
+        print("==============================")
+    
+        folder = "data/archives/"
+        folder += str(max([int(x) for x in os.listdir(folder)
+            if x != 'staging' and x[0] != '.']))
+        folder += "/staging/"
+
+        files = set()
+        for profile in os.listdir(folder):
+            for perfil in os.listdir(folder + profile):
+                if perfil[:6] == "perfil":
+                    files.add(folder+profile+"/"+perfil)
+            for post in os.listdir(folder + profile + "/posts/"):
+                if post[-5:] == ".json":
+                    files.add(folder+profile+"/posts/"+post)
+
+        for filename in files:
+            with open(filename, "r") as f:
+                j = json.load(f)
+            j = jf.flatten(j)
+            with open(filename, "w") as f:
+                json.dump(j, f)
+
 
     def _download_followers(self):
         print("==============================")
@@ -215,6 +242,7 @@ class Coletor():
         
         if not (self.input_json["download_hashtags"]):
             self._download_medias()
+            self._flatten()
 
 c = Coletor()
 c.init_crawler()
