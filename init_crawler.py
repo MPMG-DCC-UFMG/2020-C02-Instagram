@@ -170,31 +170,90 @@ class Coletor():
                     and post[:9] != "followers":
                     os.rename(name, output+post)
 
-    def _flatten(self):
+    def _select_post(self, j):
+        j = j["node"]
+        campos = {
+            "id_post": j["id"],
+            "codigo_de_media": j["shortcode"],
+            "mensagem": \
+                j["edge_media_to_caption"]["edges"][0]["node"]["text"],
+            "publicado_em": j["taken_at_timestamp"],
+            "display_url": j["display_url"],
+            "eh_video": j["is_video"],
+            "legenda_de_acessibilidade": j["accessibility_caption"],
+            "comentarios_desativados": j["comments_disabled"],
+            "numero_de_comentarios": j["edge_media_to_comment"]["count"],
+            "numero_de_likes": j["edge_liked_by"]["count"],
+            "localizacao_post": j["location"]
+        }
+        return campos
+
+    def _select_perfil(self, j):
+        j = j["node"]
+        campos = {
+            "id_do_perfil": j["id"],
+            "usuario": j["username"],
+            "nome_completo": j["full_name"],
+            "biografia": j["biography"],
+            "url_externa": j["external_url"],
+            "numero_de_seguidores": j["edge_followed_by"]["count"],
+            "numero_de_perfis_seguidos": j["edge_follow"]["count"],
+            "eh_conta_comercial": j["is_business_account"],
+            "eh_conta_privada": j["is_private"],
+            "eh_conta_verificada": j["is_verified"],
+            "localizacao": j["iphone_struct"]["city_name"]
+        }
+        return campos
+
+    def _select(self):
         print("==============================")
-        print("FLATTENING JSON")
+        print("CLEANING JSON")
         print("==============================")
     
         folder = "data/archives/"
         folder += str(max([int(x) for x in os.listdir(folder)
             if x != 'staging' and x[0] != '.']))
-        folder += "/staging/"
+        
+        if self.input_json["download_hashtags"]:
+            folder += "/hashtags/"
+            files = set()
+            for tag in os.listdir(folder):
+                for post in os.listdir(folder + tag):
+                    if post[-5:] == ".json":
+                        files.add(folder+tag+"/"+post)
 
-        files = set()
-        for profile in os.listdir(folder):
-            for perfil in os.listdir(folder + profile):
-                if perfil[:6] == "perfil":
-                    files.add(folder+profile+"/"+perfil)
-            for post in os.listdir(folder + profile + "/posts/"):
-                if post[-5:] == ".json":
-                    files.add(folder+profile+"/posts/"+post)
+            for filename in files:
+                with open(filename, "r") as f:
+                    j = json.load(f)
+                j = self._select_post(j)
+                with open(filename, "w") as f:
+                    json.dump(j, f, ensure_ascii=False)
+                
+        else:
+            folder += "/staging/"
+            profiles = set()
+            posts = set()
+            for profile in os.listdir(folder):
+                for perfil in os.listdir(folder + profile):
+                    if perfil[:6] == "perfil":
+                        profiles.add(folder+profile+"/"+perfil)
+                for post in os.listdir(folder + profile + "/posts/"):
+                    if post[-5:] == ".json":
+                        posts.add(folder+profile+"/posts/"+post)
 
-        for filename in files:
-            with open(filename, "r") as f:
-                j = json.load(f)
-            j = jf.flatten(j)
-            with open(filename, "w") as f:
-                json.dump(j, f)
+            for filename in posts:
+                with open(filename, "r") as f:
+                    j = json.load(f)
+                j = self._select_post(j)
+                with open(filename, "w") as f:
+                    json.dump(j, f, ensure_ascii=False)
+
+            for filename in profiles:
+                with open(filename, "r") as f:
+                    j = json.load(f)
+                j = self._select_perfil(j)
+                with open(filename, "w") as f:
+                    json.dump(j, f, ensure_ascii=False)
 
 
     def _download_followers(self):
@@ -242,7 +301,8 @@ class Coletor():
         
         if not (self.input_json["download_hashtags"]):
             self._download_medias()
-            self._flatten()
+
+        self._select()
 
 c = Coletor()
 c.init_crawler()
