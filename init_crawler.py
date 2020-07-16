@@ -186,6 +186,14 @@ class Coletor():
             "numero_de_likes": j["edge_liked_by"]["count"],
             "localizacao_post": j["location"]
         }
+
+        if campos["localizacao_post"] == "":
+            campos["localizacao_post"] = None
+
+        if campos["localizacao_post"] is not None:
+            campos["localizacao_post"] = \
+                campos["localizacao_post"]["name"]
+
         return campos
 
     def _select_perfil(self, j):
