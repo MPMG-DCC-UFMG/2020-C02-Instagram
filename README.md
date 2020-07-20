@@ -99,7 +99,31 @@ Se utilizar o Anaconda, pode ser que haja algum problema com a instalação do t
 
 - Lembrar também de dar permisão aos arquivos: chmod +x script
 - _Importante_: só é possível iniciar uma coleta por vez em uma mesma pasta com os arquivos fonte. Isto é necessário para garantir que as manipulações e movimentações de arquivos e pastas, necessárias para gerar as saídas corretamente, tenham integridade preservada. Para contornar isso, é possível alinhar as coletas para executar em sequência em uma mesma pasta, ou então executar coletas paralalemante em pastas diferentes. Este último deve ser evitado, para evitar queries excessivas ao Instagram.
-- Não executar o Instagram em navegador ao mesmo tempo que realiza coletas
+- Não executar o Instagram em navegador ao mesmo tempo que realiza 
+
+### Utilização com Docker
+
+Para que a instalação e execução dos scripts de coleta sejam feitas de forma facilitada, optamos por utilizar a plataforma Docker para encapsular o código e suas dependências.
+
+#### Instalação
+
+Primeiramente, faça a instalação do Docker seguindo os seguintes [passos](https://docs.docker.com/engine/install/), e instale também o Docker Compose seguindo estes [passos](https://docs.docker.com/compose/install/).
+
+Com o docker instalado, clone este repositório para sua máquina. Dentro da pasta criada, rode o comando `sudo docker-compose build` para que as imagens necessárias sejam criadas.
+
+Em seguida, como teste, rode o comando `sudo docker-compose run --rm instagram-collector` para iniciar uma coleta (por padrão, fará uma coleta utilizando as configurações localizadas no arquivo [coleta.json](https://github.com/MPMG-DCC-UFMG/C02-Instagram/blob/master/input/coleta.json)).
+
+Mais informações sobre a necessidade de executar os comandos com privilégios `sudo` podem ser encontradas [aqui](https://docs.docker.com/engine/install/linux-postinstall/).
+
+
+#### Execução
+
+Com a instalação finalizada, os scripts do coletor estarão localizados em um container que se chama ```instagram-collector```.
+
+A utilização do coletor com o Docker se diferencia um pouco da utilização normal de scripts python. Primeiramente, como os scripts serão executados dentro do container, os comandos de execução serão sempre acrescidos do comando que chama o container em que eles estão contidos. Por exemplo, em uma situação normal em que a execução do script do coletor pode ser feita pelo comando ```python init_crawler.py```, para que a mesma coisa seja feita seja feita dentro do container ```instagram-collector```, o comando seria ```docker-compose run instagram-collector python init_crawler.py```.
+
+Além disso, como os scripts são executados dentro de um container que se comporta como uma máquina virtual, eles só conseguem acessar pastas que estão dentro desta “máquina” (Isto inclui os arquivos de entrada e saída). Para fazer com que o código tenha acesso a pastas do sistema operacional do usuário, o arquivo ```docker-compose.yml``` define um espelhamento de pastas na seção ‘volumes’. Cada espelhamento está no formato ```/pasta/do/sistema/operacional/local:/caminho/para/pasta/no/container```, que define que a pasta local no Sistema Operacional será acessível dentro do container no caminho escolhido. Por padrão, está somente definido um volume que espelha a pasta raíz do repositório para a pasta raíz do container (a pasta ```/app```), fazendo com que seja possível o script acessar todo o conteúdo do repositório.
+
 
 ## Scripts
 
