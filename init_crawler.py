@@ -1,16 +1,20 @@
 import sys
 import json
 import os
+import subprocess
 import argparse
 import json_flatten as jf
 from download_medias import download_medias as dm
 from followers import DownloadFollowers as df
 from hashtags import DownloadHashtags as dh
+from profiles import DownloadProfiles as dp
+from comments import DownloadComments as dc
+from create_archives import CreateArchives as ca
 from commenters import Commenters
 from utils import extract_files as ef
 
-USERS_FILENAME = "users.txt" # nao alterar
-MAX_COMMENT_FILE = "max_comment_file.txt" # nao alterar
+# USERS_FILENAME = "users.txt" # nao alterar
+# MAX_COMMENT_FILE = "max_comment_file.txt" # nao alterar
 
 class Coletor():
     """
@@ -95,7 +99,19 @@ class Coletor():
             for user in users_list:
                 f.write(user+"\n")
 
-    def _init_comandline_crawler(self, sleep_time, min_date, aux_users_filename, username, password):
+
+    def _move_staging_files(self):
+        #### coleta a lista de pastas dentro de archives
+        result = subprocess.run(["ls","--sort=version","-r", "data/archives/"], stdout=subprocess.PIPE)
+        files_list= result.stdout.decode('utf-8')
+        files_list = files_list.split('\n')
+        
+        final_file_path = "data/archives/"+files_list[0]
+        
+        subprocess.run(["mv","data/staging",final_file_path])
+
+    ####### TROCAR O NOME DO METODO
+    def _init_comandline_crawler(self, sleep_time, max_comments,  min_date, users_list, username, password):
         """
         Cria a string do comando para terminal que inicializa o coletor de perfis
         e posts. Como o parâmetro sleep_time é opcional, o adiciona quando necessário
@@ -109,14 +125,25 @@ class Coletor():
         aux_users_filename: str
             nome do arquivo temporário criado com os nomes dos perfis que serão coletados
         """
-        command = "./run_crawl.sh -p " + \
-            str(aux_users_filename)+" -d " + str(min_date) \
-            + " -u " + str(username) + " -w " + str(password)
-        if(sleep_time is not None):
-            command = command + " -t " + str(sleep_time)
+        # command = "./run_crawl.sh -p " + \
+        #     str(aux_users_filename)+" -d " + str(min_date) \
+        #     + " -u " + str(username) + " -w " + str(password)
+        # if(sleep_time is not None):
+        #     command = command + " -t " + str(sleep_time)
 
-        print(command)
-        os.system(command)
+        # print(command)
+        # os.system(command)
+        dprofiles = dp(users_list,min_date,sleep_time,username,password)
+        dprofiles.download_profiles()
+
+        dcomments = dc(max_comments, "data/staging")
+        dcomments.download_comments()
+
+        carchives = ca("data/staging", "data/archives", "data/staging/comments.json")
+        carchives.create_archives()
+
+
+        self._move_staging_files()
 
     def _parse_json(self):
         """
@@ -132,11 +159,13 @@ class Coletor():
         min_date = self.input_json["min_date"]
         username = self.input_json["user"]
         password = self.input_json["passwd"]
-        self._create_users_input_file(USERS_FILENAME)
-        self._create_max_comments_input_file(MAX_COMMENT_FILE)
-        self._init_comandline_crawler(sleep_time, min_date, USERS_FILENAME, username, password)
-        os.remove(USERS_FILENAME)
-        os.remove(MAX_COMMENT_FILE)
+        users_list = self.input_json["users"]
+        max_comments = self.input_json["max_comments"]
+        # self._create_users_input_file(USERS_FILENAME)
+        # self._create_max_comments_input_file(MAX_COMMENT_FILE)
+        self._init_comandline_crawler(sleep_time, max_comments,min_date, users_list, username, password)
+        # os.remove(USERS_FILENAME)
+        # os.remove(MAX_COMMENT_FILE)
 
     def _download_medias(self):
         print("==============================")
@@ -162,7 +191,11 @@ class Coletor():
             for post in os.listdir(folder + profile):
                 name = folder+profile+"/"+post
                 if post[:n] == profile:
-                    os.rename(name, folder+profile+"/perfil_"+post)
+                    if post[-3:] != "jpg":
+                        os.rename(name, folder+profile+"/perfil_"+post)
+                    else:
+                        print("AAAAAAAAAA",post,folder+profile+"/"+post[len(profile)+1:])
+                        os.rename(name, folder+profile+"/"+post[len(profile)+1:])
                 elif post[-3:] != "jpg" \
                     and post[:8] != "comments" \
                     and not os.path.isdir(name) \
@@ -198,6 +231,10 @@ class Coletor():
 
     def _select_perfil(self, j):
         j = j["node"]
+        try:
+            localizacao = j["iphone_struct"]["city_name"]
+        except:
+            localizacao = None
         campos = {
             "id_do_perfil": j["id"],
             "usuario": j["username"],
@@ -209,7 +246,7 @@ class Coletor():
             "eh_conta_comercial": j["is_business_account"],
             "eh_conta_privada": j["is_private"],
             "eh_conta_verificada": j["is_verified"],
-            "localizacao": j["iphone_struct"]["city_name"]
+            "localizacao": localizacao
         }
         return campos
 

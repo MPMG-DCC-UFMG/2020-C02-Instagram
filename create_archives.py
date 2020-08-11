@@ -273,9 +273,9 @@ class CreateArchives():
         # fo_profiles_periodic.close()
 
 
-INPUT_DIR = "data/staging"
-OUTPUT_DIR = "data/archives"
-INPUT_ARCHIVE_COMMENTS = "data/staging/comments.json"
+# INPUT_DIR = "data/staging"
+# OUTPUT_DIR = "data/archives"
+# INPUT_ARCHIVE_COMMENTS = "data/staging/comments.json"
 
-ca = CreateArchives(INPUT_DIR, OUTPUT_DIR, INPUT_ARCHIVE_COMMENTS)
-ca.create_archives()
+# ca = CreateArchives(INPUT_DIR, OUTPUT_DIR, INPUT_ARCHIVE_COMMENTS)
+# ca.create_archives()

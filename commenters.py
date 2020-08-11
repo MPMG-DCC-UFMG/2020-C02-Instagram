@@ -12,7 +12,7 @@ class Commenters():
 
     def _get_user_info_json(self, username, username_login, password):
         L = Instaloader(quiet=True)
-        L.load_session_from_file(username_login, filename="data/session ")
+        L.load_session_from_file(username_login, filename="data/session")
 
         profile = Profile.from_username(L.context, username)
         profile_info = {}
