@@ -268,11 +268,14 @@ class Coletor():
                         files.add(folder+tag+"/"+post)
 
             for filename in files:
-                with open(filename, "r") as f:
-                    j = json.load(f)
-                j = self._select_post(j)
-                with open(filename, "w") as f:
-                    json.dump(j, f, ensure_ascii=False)
+                if (filename[-14:]!="_comments.json"):                    
+                    with open(filename, "r") as f:
+                        j = json.load(f)
+                    j = self._select_post(j)
+                    with open(filename, "w") as f:
+                        json.dump(j, f, ensure_ascii=False)
+                else:
+                    os.remove(filename)
                 
         else:
             folder += "/staging/"
