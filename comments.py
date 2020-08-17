@@ -248,12 +248,3 @@ class DownloadComments():
                   current_profile, "---\n")
 
         print(self._now_str(), "Finished")
-
-# with open("max_comment_file.txt") as f:
-#     MAX_COMMENTS = int(f.read())
-
-# INPUT_DIR = "data/staging"
-
-
-# dc = DownloadComments(MAX_COMMENTS, INPUT_DIR)
-# dc.download_comments()

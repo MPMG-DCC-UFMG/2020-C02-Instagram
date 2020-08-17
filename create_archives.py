@@ -81,7 +81,6 @@ class CreateArchives():
                     data = json.loads(line)
                     print(json.dumps(data) + ",", file=final_file)
             print("{}]}", file=final_file)
-            # shutil.move(INPUT_ARCHIVE_COMMENTS, final_comments_file_path)
         except Exception as e:
             print(e)
             print(self._now_str(), "Error in copying comment file")
@@ -233,18 +232,14 @@ class CreateArchives():
             tipo "media"
         """
         print("{\"data\": [", file=fo_medias)
-        # print("{\"data\": [", file=fo_medias_periodic)
         for f in glob.glob("{}/*/*.json.xz".format(self.INPUT_DIR)):
             try:
                 if "UTC" in f:
                     my_post = self._parse_archive_medias(f, fo_medias)
-                    # self._parse_archive_periodic_media(
-                    #     my_post, fo_medias_periodic)
 
             except Exception as e:
                 print(self._now_str(), "Error in file:", f, "Error:", e)
         print("{}]}", file=fo_medias)
-        # print("{}]}", file=fo_medias_periodic)
 
     def create_archives(self):
         """
@@ -259,23 +254,6 @@ class CreateArchives():
 
         print(self._now_str(), "Creating archives at:",
               "data/archives/{}".format(self.TIME))
-        # perfis e midias
-        # fo_medias = open(OUT_ARCHIVE_MEDIAS, "w")
-        # fo_medias_periodic = open(OUT_ARCHIVE_MEDIAS_PERIODIC, "w")
-        # fo_profiles_periodic = open(OUT_ARCHIVE_PROFILES_PERIODIC, "w")
 
-        # self._parse_medias(fo_medias)
-        # self._aggregate_profiles(fo_profiles_periodic)
         self._aggregate_comments(OUT_ARCHIVE_COMMENTS)
 
-        # fo_medias.close()
-        # fo_medias_periodic.close()
-        # fo_profiles_periodic.close()
-
-
-# INPUT_DIR = "data/staging"
-# OUTPUT_DIR = "data/archives"
-# INPUT_ARCHIVE_COMMENTS = "data/staging/comments.json"
-
-# ca = CreateArchives(INPUT_DIR, OUTPUT_DIR, INPUT_ARCHIVE_COMMENTS)
-# ca.create_archives()

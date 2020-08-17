@@ -13,8 +13,6 @@ from create_archives import CreateArchives as ca
 from commenters import Commenters
 from utils import extract_files as ef
 
-# USERS_FILENAME = "users.txt" # nao alterar
-# MAX_COMMENT_FILE = "max_comment_file.txt" # nao alterar
 
 class Coletor():
     """
@@ -76,30 +74,6 @@ class Coletor():
             self.input_json = json.loads(data)
             print("Input mode: JSON string")
 
-
-    def _create_max_comments_input_file(self, max_comment_file):
-        with open(max_comment_file, "w") as f:
-            # print(str(input_json_data["max_comments"]))
-            f.write(str(self.input_json["max_comments"]))
-
-    def _create_users_input_file(self, aux_users_filename):
-        """
-        Cria um arquivo temporário que armazena os nomes dos perfis que
-        devem ser coletados, um por linha. Este arquivo facilita o 
-        funcionamento do coletor, pois é mais facilmente interpretado 
-        pelo script "1_download.sh" 
-        
-        Parâmetros
-        -----------
-            aux_users_filename: str
-                nome do arquivo temporário que será criado
-        """
-        users_list = self.input_json["users"]
-        with open(aux_users_filename, "w") as f:
-            for user in users_list:
-                f.write(user+"\n")
-
-
     def _move_staging_files(self):
         #### coleta a lista de pastas dentro de archives
         result = subprocess.run(["ls","--sort=version","-r", "data/archives/"], stdout=subprocess.PIPE)
@@ -110,8 +84,7 @@ class Coletor():
         
         subprocess.run(["mv","data/staging",final_file_path])
 
-    ####### TROCAR O NOME DO METODO
-    def _init_comandline_crawler(self, sleep_time, max_comments,  min_date, users_list, username, password):
+    def _init_crawler(self, sleep_time, max_comments,  min_date, users_list, username, password):
         """
         Cria a string do comando para terminal que inicializa o coletor de perfis
         e posts. Como o parâmetro sleep_time é opcional, o adiciona quando necessário
@@ -125,14 +98,6 @@ class Coletor():
         aux_users_filename: str
             nome do arquivo temporário criado com os nomes dos perfis que serão coletados
         """
-        # command = "./run_crawl.sh -p " + \
-        #     str(aux_users_filename)+" -d " + str(min_date) \
-        #     + " -u " + str(username) + " -w " + str(password)
-        # if(sleep_time is not None):
-        #     command = command + " -t " + str(sleep_time)
-
-        # print(command)
-        # os.system(command)
         dprofiles = dp(users_list,min_date,sleep_time,username,password)
         dprofiles.download_profiles()
 
@@ -161,11 +126,7 @@ class Coletor():
         password = self.input_json["passwd"]
         users_list = self.input_json["users"]
         max_comments = self.input_json["max_comments"]
-        # self._create_users_input_file(USERS_FILENAME)
-        # self._create_max_comments_input_file(MAX_COMMENT_FILE)
-        self._init_comandline_crawler(sleep_time, max_comments,min_date, users_list, username, password)
-        # os.remove(USERS_FILENAME)
-        # os.remove(MAX_COMMENT_FILE)
+        self._init_crawler(sleep_time, max_comments,min_date, users_list, username, password)
 
     def _download_medias(self):
         print("==============================")
