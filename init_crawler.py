@@ -194,7 +194,6 @@ class Coletor():
                     if post[-3:] != "jpg":
                         os.rename(name, folder+profile+"/perfil_"+post)
                     else:
-                        print("AAAAAAAAAA",post,folder+profile+"/"+post[len(profile)+1:])
                         os.rename(name, folder+profile+"/"+post[len(profile)+1:])
                 elif post[-3:] != "jpg" \
                     and post[:8] != "comments" \
@@ -206,6 +205,7 @@ class Coletor():
     def _select_post(self, j):
         j = j["node"]
         campos = {
+            "username": j["owner"]["username"],
             "id_post": j["id"],
             "codigo_de_media": j["shortcode"],
             "mensagem": \
