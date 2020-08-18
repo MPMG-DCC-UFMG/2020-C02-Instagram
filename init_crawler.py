@@ -164,6 +164,11 @@ class Coletor():
                     os.rename(name, output+post)
 
     def _select_post(self, j):
+        #Esse método é bastante sensível à mudanças do instagram. Pode ser
+        #preciso alterar conforme os dados são retornados pelo instaloader
+        """
+        Limpa o json, selecionando campos de interesse
+        """
         j = j["node"]
         try:
             legenda = j["accessibility_caption"]
@@ -172,12 +177,10 @@ class Coletor():
         try:
             comentarios = j["edge_media_to_comment"]["count"]
         except:
-            print("erro de comentarios")
             comentarios = None
         try:
             likes = j["edge_liked_by"]["count"]
         except :
-            print("erro de likes")
             likes = None
         try:
             localizacao = j["location"]
@@ -209,6 +212,9 @@ class Coletor():
         return campos
 
     def _select_perfil(self, j):
+        """
+        Limpa perfil, selecionando campos de interesse
+        """
         j = j["node"]
         try:
             localizacao = j["iphone_struct"]["city_name"]

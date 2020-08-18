@@ -7,10 +7,17 @@ import json
 
 
 class Commenters():
+    """
+    Classe que realiza download de informação dos perfis
+    de usuarios que realizaram comentarios nos posts coletados
+    """
     def __init__(self):
         self._get_path()
 
     def _get_user_info_json(self, username, username_login, password):
+        """
+        Gera um json com informações sobre um usuário dado como parâmetro
+        """
         L = Instaloader(quiet=True)
         L.load_session_from_file(username_login, filename="data/session")
 
@@ -27,6 +34,9 @@ class Commenters():
         return profile_json
 
     def _get_users_list(self, filename):
+        """
+        Gera lista de nomes de usuários que comentaram nos posts coletados
+        """
         with open(filename, "r") as f:
             data = json.loads(f.read())
         commenters = []
@@ -41,7 +51,7 @@ class Commenters():
 
     def _get_path(self):
         """
-        
+        utilitario para gerar o caminho do arquivo que sera salvo
         """
         folder = str(max([int(x) for x in os.listdir("data/archives")
             if x != 'staging' and x[0] != '.']))

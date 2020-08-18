@@ -6,8 +6,14 @@ import subprocess
 import time
 
 class DownloadProfiles():
-    def __init__(self, users_list,min_date,sleep, username, password):
+    """
+    Realiza download de perfis e posts de usuarios especificados
 
+    """
+    def __init__(self, users_list,min_date,sleep, username, password):
+        """
+        Inicializa objeto
+        """
         self._users_list = users_list
         self._tokenize_date(min_date)
         self._sleep = sleep
@@ -24,6 +30,9 @@ class DownloadProfiles():
 
 
     def _tokenize_date(self, date_str):
+        """
+        Utilitario que realiza parsing na data dada como parametro
+        """
         date_list = date_str.split(",")
         self._year = int(date_list[0])
         self._month = int(date_list[1])
@@ -32,10 +41,7 @@ class DownloadProfiles():
 
     def download_profiles(self):
         """
-        
-        Parâmetros
-        -----------
-            Nenhum
+        Realiza download de perfis recebidos como entrada
         """
         for user in self._users_list:
             prof = set()
