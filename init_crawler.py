@@ -165,6 +165,24 @@ class Coletor():
 
     def _select_post(self, j):
         j = j["node"]
+        try:
+            legenda = j["accessibility_caption"]
+        except :
+            legenda = ""
+        try:
+            comentarios = j["edge_media_to_comment"]["count"]
+        except:
+            print("erro de comentarios")
+            comentarios = None
+        try:
+            likes = j["edge_liked_by"]["count"]
+        except :
+            print("erro de likes")
+            likes = None
+        try:
+            localizacao = j["location"]
+        except:
+            localizacao = ""
         campos = {
             "username": j["owner"]["username"],
             "id_post": j["id"],
@@ -174,11 +192,11 @@ class Coletor():
             "publicado_em": j["taken_at_timestamp"],
             "display_url": j["display_url"],
             "eh_video": j["is_video"],
-            "legenda_de_acessibilidade": j["accessibility_caption"],
+            "legenda_de_acessibilidade": legenda,
             "comentarios_desativados": j["comments_disabled"],
-            "numero_de_comentarios": j["edge_media_to_comment"]["count"],
-            "numero_de_likes": j["edge_liked_by"]["count"],
-            "localizacao_post": j["location"]
+            "numero_de_comentarios": comentarios,
+            "numero_de_likes": likes,
+            "localizacao_post": localizacao
         }
 
         if campos["localizacao_post"] == "":
