@@ -16,6 +16,11 @@ class Coletor():
             self.data_path = "/var/instagram-crawler/jsons/"
             self.data_path += "/" if self.data_path[len(self.data_path)-1] != "/" else ""
 
+            try:
+                os.makedirs(self.data_path)
+            except Exception as e:
+                pass
+
             self.instagram_user = input_json['login_usuario']
             self.instagram_passwd = input_json['login_senha']
 
