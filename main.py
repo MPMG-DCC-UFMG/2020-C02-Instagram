@@ -321,6 +321,8 @@ def main():
     try:
         start_time = datetime.now()
 
+        print(sys.argv, flush=True)
+
         '''
         --------------------------------------------------------
         Le dados de entrada
