@@ -2,6 +2,8 @@
 
 Coleta perfis com utilizando [instaloader](https://instaloader.github.io/) e armazena localmente
 
+TODO atualizar README
+
 ### Uso
 
 Faz download de mídias e comentários de uma lista de perfis, dada uma data de início para a coleta
