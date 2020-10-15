@@ -1,6 +1,7 @@
 {
   "coletor": "instagram",
   "lista_de_proxies": ["usuario:senha@endereco_proxy:porta"],
+  "pasta_da_saida": "data",
   "login_usuario": "usuario",
   "login_senha": "senha",
   "usuarios": ["anvisaoficial"],

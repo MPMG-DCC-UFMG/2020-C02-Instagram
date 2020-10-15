@@ -321,7 +321,7 @@ def main():
     try:
         start_time = datetime.now()
 
-        print(sys.argv, flush=True)
+        # print(sys.argv, flush=True)
 
         '''
         --------------------------------------------------------
