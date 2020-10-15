@@ -10,16 +10,18 @@ from data_collection import DataCollection
 
 import json
 
+
+TARGET_JSON_FOLDER = "/var/instagram-crawler/jsons/"
+
+try:
+    os.makedirs(TARGET_JSON_FOLDER)
+except Exception as e:
+    pass
+
 class Coletor():
     def __init__(self, input_json):
         try:
-            self.data_path = "/var/instagram-crawler/jsons/"
-            self.data_path += "/" if self.data_path[len(self.data_path)-1] != "/" else ""
-
-            try:
-                os.makedirs(self.data_path)
-            except Exception as e:
-                pass
+            self.data_path = TARGET_JSON_FOLDER
 
             self.collection_type = input_json['tipo_de_coleta']
 
@@ -322,12 +324,6 @@ def main():
         --------------------------------------------------------
         Le dados de entrada
         '''
-        input_json = ""
-        cmd = ""
-
-        # for item in sys.argv:
-        #     print(item)
-
         try:
             cmd = sys.argv[1]
         except:
@@ -341,8 +337,9 @@ def main():
                 input_json = json.loads(json_dump_input)
             else:
                 filename_data_input = sys.argv[1]
-                with open(filename_data_input, "r", encoding="utf-8") as file_input:
+                with open(TARGET_JSON_FOLDER+ '../' +filename_data_input, "r", encoding="utf-8") as file_input:
                     input_json = json.load(file_input)
+
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
