@@ -1,4 +1,2 @@
-###### Pacotes com versões testadas ######
-instaloader == 4.4.4
-timeout-decorator == 0.4.1
-json-flatten
+requests==2.9.1
+urllib3==1.25.9

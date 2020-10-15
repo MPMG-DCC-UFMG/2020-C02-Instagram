@@ -1,17 +1,37 @@
-# Use an official Python runtime as a parent image
-FROM python:3.8
+# Download base image ubuntu 16.04
+FROM ubuntu:16.04
 
-# Set the working directory to /app
-WORKDIR /app
+# Set encoding
+ENV LANG C.UTF-8
 
-# COPY requirements to /app dir
-COPY requirements.txt /app
+# Update Ubuntu Software repository
+RUN apt-get update -y && apt-get upgrade -y
 
-# Install any needed packages specified in base.txt
-RUN pip install --trusted-host pypi.python.org -r requirements.txt
+# Install essential packages
+RUN apt-get install -y wget curl zip
 
-# COPY the source code
-COPY . /app
+# Install python-related packages
+RUN apt-get install -y python3
 
-# Set the default run command
-CMD python3 -B init_crawler.py  --json input/coleta.json
+# Test python3
+# RUN python3 -c 'print(1997)'
+
+# Install pip3
+COPY get-pip.py /
+RUN python3 /get-pip.py && rm /get-pip.py
+
+# Install pip libraries
+COPY requirements.txt /
+RUN pip3 install --no-cache-dir -r requirements.txt
+
+# Check freeze
+# RUN pip3 freeze
+
+# Create needed folders
+RUN mkdir /home/mp && mkdir /home/mp/coletor-instagram
+
+# Copy files to specified folders
+COPY . /home/mp/coletor-instagram/
+
+# Assure it worked
+RUN pip3 freeze && find /home/mp/ -iname "*py"

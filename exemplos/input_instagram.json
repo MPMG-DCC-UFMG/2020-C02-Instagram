@@ -1,0 +1,12 @@
+{
+  "coletor": "instagram",
+  "lista_de_proxies": ["usuario:senha@endereco_proxy:porta"],
+  "login_usuario": "usuario",
+  "login_senha": "senha",
+  "usuarios": ["anvisaoficial"],
+  "palavras": ["covid19"],
+  "data_minima": "2020-8-1",
+  "data_maxima": "2020-10-1",
+  "limite_de_posts": 20,
+  "limite_de_comentarios": 100
+}
