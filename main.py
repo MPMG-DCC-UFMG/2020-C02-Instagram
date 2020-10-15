@@ -12,6 +12,7 @@ import json
 
 
 TARGET_JSON_FOLDER = "/var/instagram-crawler/jsons/"
+INPUT_JSON_FOLDER = "/var/instagram-crawler/"
 
 try:
     os.makedirs(TARGET_JSON_FOLDER)
@@ -337,7 +338,7 @@ def main():
                 input_json = json.loads(json_dump_input)
             else:
                 filename_data_input = sys.argv[1]
-                with open(TARGET_JSON_FOLDER+ '../' +filename_data_input, "r", encoding="utf-8") as file_input:
+                with open(INPUT_JSON_FOLDER +filename_data_input, "r", encoding="utf-8") as file_input:
                     input_json = json.load(file_input)
 
         except Exception as e:
