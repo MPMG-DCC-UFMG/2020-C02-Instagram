@@ -11,7 +11,7 @@ from data_collection import DataCollection
 import json
 
 class Coletor():
-    def __init__(self, input_json,collection_type):
+    def __init__(self, input_json):
         try:
             self.data_path = "/var/instagram-crawler/jsons/"
             self.data_path += "/" if self.data_path[len(self.data_path)-1] != "/" else ""
@@ -20,6 +20,8 @@ class Coletor():
                 os.makedirs(self.data_path)
             except Exception as e:
                 pass
+
+            self.collection_type = input_json['tipo_de_coleta']
 
             self.instagram_user = input_json['login_usuario']
             self.instagram_passwd = input_json['login_senha']
@@ -39,7 +41,6 @@ class Coletor():
 
             self.proxy_index = 0
             self.max_attempts = len(self.proxy_list)+1
-            self.collection_type = collection_type
 
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -224,7 +225,12 @@ class Coletor():
 
             print("Processo de coleta iniciado em {}\tSalvando dados em {}".format(start_time, self.data_path_source_files), flush=True)
 
-            if self.collection_type == "users":
+            if self.collection_type != "por_usuario" and self.collection_type != "por_hashtag":
+                print("\nTipo de coleta nao identificado. Finalizando script ", flush=True)
+                sys.exit(1)
+
+
+            if self.collection_type == "por_usuario":
                 ### COLETA 1.1 - PERFIL
                 document_input_list=self.user_list
                 filename_output = self.filename_profiles_posts
@@ -246,7 +252,7 @@ class Coletor():
                 else:
                     print("\nAtencao: Sem perfis armazenados para coletar posts.",flush=True)
 
-            if self.collection_type == "hashtags":
+            if self.collection_type == "por_hashtag":
                 ### COLETA 1 - HASHTAGS
                 document_input_list = self.hashtag_list
                 filename_output = self.filename_posts
@@ -323,37 +329,32 @@ def main():
         #     print(item)
 
         try:
-            cmd = sys.argv[2]
+            cmd = sys.argv[1]
         except:
             print("Erro: Nenhuma entrada informada. Fechando script...")
             sys.exit(1)
 
-        if cmd == "--json":
-            try:
-                data = sys.argv[3]
-                with open(data, "r", encoding="utf-8") as file_input:
+        try:
+            if cmd == "-d":
+                json_dump_input = sys.argv[2]
+                json_dump_input = json_dump_input.replace("'", '"')
+                input_json = json.loads(json_dump_input)
+            else:
+                filename_data_input = sys.argv[1]
+                with open(filename_data_input, "r", encoding="utf-8") as file_input:
                     input_json = json.load(file_input)
-                #print("Input mode: JSON file")
-            except Exception as e:
-                # exc_type, exc_obj, exc_tb = sys.exc_info()
-                # fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                # print('\nErro: ', e, '\tDetalhes: ', exc_type, fname, exc_tb.tb_lineno, '\tData e hora: ', datetime.now(),
-                #       flush=True)
-
-                print("Erro: Nenhuma entrada informada. Fechando script...")
-                sys.exit(1)
-
-        else:
-            data = cmd.replace("'", '"')
-            input_json = json.loads(data)
-            #print("Input mode: JSON string")
+        except Exception as e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            print('\nErro na entrada de dados: ', e, '\tDetalhes: ', exc_type, fname, exc_tb.tb_lineno, '\tFechando script: ',flush=True)
+            sys.exit(1)
 
         '''
         --------------------------------------------------------
         Testa se dados de entrada sao validos
         '''
         attributes_to_run = ['lista_de_proxies','usuarios','palavras','data_minima','data_maxima', 'limite_de_posts',
-                             'limite_de_comentarios', "login_usuario","login_senha"]
+                             'limite_de_comentarios', "login_usuario","login_senha", "tipo_de_coleta"]
 
 
         attributes_not_provided = [x for x in attributes_to_run if x not in input_json]
@@ -369,11 +370,8 @@ def main():
         Inicia coleta
         '''
 
-        collection_type = sys.argv[1]
-        c = Coletor(input_json=input_json, collection_type=collection_type)
-        ###c.printCollectionParameters()
+        c = Coletor(input_json=input_json)
         c.create_collection_pipeline()
-
 
         end_time = datetime.now()
         print("\nData de inicio: %s\nData final: %s\nTempo de execucao (minutos): %s\n" % (start_time, end_time, ((end_time - start_time).seconds)/60))
