@@ -337,8 +337,9 @@ def main():
                 json_dump_input = json_dump_input.replace("'", '"')
                 input_json = json.loads(json_dump_input)
             else:
-                filename_data_input = sys.argv[1]
-                with open(INPUT_JSON_FOLDER +filename_data_input, "r", encoding="utf-8") as file_input:
+                filename_data_input = str(INPUT_JSON_FOLDER +sys.argv[1])
+
+                with open(filename_data_input, "r", encoding="utf-8") as file_input:
                     input_json = json.load(file_input)
 
         except Exception as e:
