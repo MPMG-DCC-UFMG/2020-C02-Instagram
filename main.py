@@ -11,8 +11,11 @@ from data_collection import DataCollection
 import json
 
 
-TARGET_JSON_FOLDER = "/var/instagram-crawler/jsons/"
-INPUT_JSON_FOLDER = "/var/instagram-crawler/"
+# TARGET_JSON_FOLDER = "/var/instagram-crawler/jsons/"
+# INPUT_JSON_FOLDER = "/var/instagram-crawler/"
+
+TARGET_JSON_FOLDER = "/data/jsons/"
+INPUT_JSON_FOLDER = "/data/"
 
 try:
     os.makedirs(TARGET_JSON_FOLDER)
