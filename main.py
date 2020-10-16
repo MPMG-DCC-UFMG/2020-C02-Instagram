@@ -386,8 +386,9 @@ def main():
         --------------------------------------------------------
         Testa se dados de entrada sao validos
         '''
-        attributes_to_run = ['lista_de_proxies','usuarios','palavras','data_minima','data_maxima', 'limite_de_posts',
-                             'limite_de_comentarios', "login_usuario","login_senha", "tipo_de_coleta"]
+        attributes_to_run = ['lista_de_proxies','usuarios','palavras','data_min','data_max', 'maximo_posts',
+                             'maximo_comentarios', "login_usuario","login_senha", "tipo_coleta",
+                             "palavras_a_baixar_midias", "usuarios_a_baixar_midias", "pasta_da_saida"]
 
 
         attributes_not_provided = [x for x in attributes_to_run if x not in input_json]
