@@ -19,28 +19,65 @@ try:
 except Exception as e:
     pass
 
+
 class Coletor():
+    """
+    Recebe os parametros de entrada, gerencia os proxies e organiza a chamada das coletas.
+    Atributos
+    ----------
+    data_path: str
+        Pasta onde os dados da coleta serao persistidos
+    instagram_user: str
+        Usuario do Instagram para fazer login
+    instagram_passwd: str
+        Senha de usuario do Instagram para fazer login
+    proxy_list: list de str
+        Lista de proxies
+    collection_type: str
+        Se a coleta e de 'usuarios' ou 'hashtags'
+    user_list : list de str
+        Lista de usuarios a serem monitoradas
+    hashtag_list : list de str
+        Lista de palavras-chave (hashtags)
+    min_date : objeto datetime
+        Data limite inferior da coleta.
+    max_date : objeto datetime
+        Data limite superior da coleta.
+    max_posts: int
+        Numero maximo de posts a serem coletados no periodo
+    max_comments: int
+        Numero maximo de comentarios por posts a serem coletados
+    Metodos
+    -------
+    Construtor(Json)
+        Construtor da classe. Recebe uma string de json com as informacoes necessarias para a coleta.
+    create_collection_pipeline()
+        Inicializa o processo de coleta de acordo com os parametros de entrada.
+    """
     def __init__(self, input_json):
         try:
             self.data_path = TARGET_JSON_FOLDER
-
-            self.collection_type = input_json['tipo_de_coleta']
 
             self.instagram_user = input_json['login_usuario']
             self.instagram_passwd = input_json['login_senha']
 
             self.proxy_list = input_json['lista_de_proxies']
+            self.collection_type = input_json['tipo_coleta']
+
             self.user_list = input_json['usuarios']
-            self.hashtag_list = input_json['palavras']
+            self.hashtag_list = []
+
+            for hashtag in input_json['palavras']:
+                self.hashtag_list.append(str(hashtag).replace("#", ""))
+
             # self.users_to_download_media = input_json['usuarios_a_baixar_midias']
 
             dataHandle = DataHandle()
-            self.min_date = dataHandle.getDateFormatted(str(input_json['data_minima']), only_date=True) if input_json['data_minima'] is not None else None
-            self.max_date = dataHandle.getDateFormatted(str(input_json['data_maxima']), only_date=True) if input_json['data_maxima'] is not None else None
+            self.min_date = dataHandle.getDateFormatted(str(input_json['data_min']), only_date=True) if input_json['data_min'] is not None else None
+            self.max_date = dataHandle.getDateFormatted(str(input_json['data_max']), only_date=True) if input_json['data_max'] is not None else None
 
-            self.max_posts = input_json['limite_de_posts']
-            self.max_comments = input_json['limite_de_comentarios']
-            # self.print_logs = bool(input_json['mostrar_logs_execucao'])
+            self.max_posts = input_json['maximo_posts']
+            self.max_comments = input_json['maximo_comentarios']
 
             self.proxy_index = 0
             self.max_attempts = len(self.proxy_list)+1
@@ -80,14 +117,6 @@ class Coletor():
         self.filepath_medias ='{}{}/{}/'.format(self.data_path , current_timestamp, "medias")
 
 
-    def __print_collection_parameters(self):
-        print("users:", self.user_list)
-        print("min_date:", self.min_date)
-        print("max_comments:", self.max_comments)
-        print("hashtags_list:", self.hashtag_list)
-        print("proxy_list:", self.proxy_list)
-
-
     def __get_proxy(self):
         proxies = None
 
@@ -115,7 +144,7 @@ class Coletor():
             return proxies
 
 
-    def execute_data_collection(self, filename_output, dataHandle, document_input_list, debug_message, collection_type):
+    def __execute_data_collection(self, filename_output, dataHandle, document_input_list, debug_message, collection_type):
         collection_sucess = False
         error_document = None
         erroNotInstaloader = False
@@ -238,20 +267,20 @@ class Coletor():
                 document_input_list=self.user_list
                 filename_output = self.filename_profiles_posts
 
-                self.execute_data_collection(filename_output=filename_output, dataHandle=dataHandle,
-                                             document_input_list=document_input_list,
-                                             debug_message="Inicio da coleta de perfil de usuarios",
-                                             collection_type="profiles_posts")
+                self.__execute_data_collection(filename_output=filename_output, dataHandle=dataHandle,
+                                               document_input_list=document_input_list,
+                                               debug_message="Inicio da coleta de perfil de usuarios",
+                                               collection_type="profiles_posts")
 
                 ### COLETA 1.2 - POSTS DE PERFIL
                 document_input_list = dataHandle.getData(filename_input=self.filename_profiles_posts, attributes_to_select=['nome_do_usuario'])
                 filename_output = self.filename_posts
 
                 if len(document_input_list) > 0:
-                    self.execute_data_collection(filename_output=filename_output, dataHandle=dataHandle,
-                                                                     document_input_list=document_input_list,
-                                                                     debug_message="Inicio da coleta de posts de usuario",
-                                                                     collection_type="posts_profile")
+                    self.__execute_data_collection(filename_output=filename_output, dataHandle=dataHandle,
+                                                   document_input_list=document_input_list,
+                                                   debug_message="Inicio da coleta de posts de usuario",
+                                                   collection_type="posts_profile")
                 else:
                     print("\nAtencao: Sem perfis armazenados para coletar posts.",flush=True)
 
@@ -260,10 +289,10 @@ class Coletor():
                 document_input_list = self.hashtag_list
                 filename_output = self.filename_posts
 
-                self.execute_data_collection(filename_output=filename_output, dataHandle=dataHandle,
-                                                                 document_input_list=document_input_list,
-                                                                 debug_message="Inicio da coleta de posts com hashtag",
-                                                                 collection_type="posts_hashtag")
+                self.__execute_data_collection(filename_output=filename_output, dataHandle=dataHandle,
+                                               document_input_list=document_input_list,
+                                               debug_message="Inicio da coleta de posts com hashtag",
+                                               collection_type="posts_hashtag")
 
             ### COLETA 2 - MIDIA DOS POSTS
             document_input_list = dataHandle.getData(filename_input=self.filename_posts,
@@ -272,10 +301,10 @@ class Coletor():
             filepath_output = self.filepath_medias
 
             if len(document_input_list) > 0:
-                self.execute_data_collection(filename_output=filepath_output, dataHandle=dataHandle,
-                                                                 document_input_list=document_input_list,
-                                                                 debug_message="Inicio da coleta de media dos posts",
-                                                                 collection_type="media")
+                self.__execute_data_collection(filename_output=filepath_output, dataHandle=dataHandle,
+                                               document_input_list=document_input_list,
+                                               debug_message="Inicio da coleta de media dos posts",
+                                               collection_type="media")
             else:
                 print("\nAtencao: Sem posts armazenados para coletar midia.", flush=True)
 
@@ -285,10 +314,10 @@ class Coletor():
             filename_output = self.filename_comments
 
             if len(document_input_list) > 0:
-                self.execute_data_collection(filename_output=filename_output, dataHandle=dataHandle,
-                                             document_input_list=document_input_list,
-                                             debug_message="Inicio da coleta de comments de posts",
-                                             collection_type="comments")
+                self.__execute_data_collection(filename_output=filename_output, dataHandle=dataHandle,
+                                               document_input_list=document_input_list,
+                                               debug_message="Inicio da coleta de comments de posts",
+                                               collection_type="comments")
             else:
                 print("\nAtencao: Sem posts armazenados para coletar comentarios.", flush=True)
 
@@ -298,10 +327,10 @@ class Coletor():
             filename_output = self.filename_profiles_comments
 
             if len(document_input_list) > 0:
-                self.execute_data_collection(filename_output=filename_output, dataHandle=dataHandle,
-                                             document_input_list=document_input_list,
-                                             debug_message="Inicio da coleta de perfil de comentadores",
-                                             collection_type="profiles_comments")
+                self.__execute_data_collection(filename_output=filename_output, dataHandle=dataHandle,
+                                               document_input_list=document_input_list,
+                                               debug_message="Inicio da coleta de perfil de comentadores",
+                                               collection_type="profiles_comments")
             else:
                 print("\nAtencao: Sem comentarios armazenados para coletar perfis de comentadores.", flush=True)
 

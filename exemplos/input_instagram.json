@@ -1,13 +1,16 @@
 {
-  "coletor": "instagram",
   "lista_de_proxies": ["usuario:senha@endereco_proxy:porta"],
-  "pasta_da_saida": "data",
   "login_usuario": "usuario",
   "login_senha": "senha",
   "usuarios": ["anvisaoficial"],
+  "usuarios_a_baixar_midias": ["anvisaoficial"],
   "palavras": ["covid19"],
-  "data_minima": "2020-8-1",
-  "data_maxima": "2020-10-1",
-  "limite_de_posts": 20,
-  "limite_de_comentarios": 100
+  "palavras_a_baixar_midias": ["covid19"],
+  "data_min": "2020-8-1",
+  "data_max": "2020-10-1",
+  "maximo_posts": 20,
+  "maximo_comentarios": 100,
+  "pasta_da_saida": "data",
+  "coletor": "instagram",
+  "tipo_coleta": "usuarios"
 }

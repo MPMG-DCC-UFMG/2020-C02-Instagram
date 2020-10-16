@@ -7,6 +7,22 @@ from datetime import datetime
 import json
 
 class DataHandle:
+    """
+    Contem metodos para persistir e recuperar dados, criar diretorios e formatar string de data-e-hora.
+    Atributos
+    ----------
+    Metodos
+    -------
+    persistData(filename_output: str, document_list: list de str, operation_type: 'w' para write ou 'a' para append)
+        Persite uma lista de documentos em um arquivo (filename_output) ou em outro meio apropriado.
+    getData(filename_input: str, attributes_to_select: list de str)
+        Retorna lista de documentos no arquivo (ou local) filename_input.
+        Cada documento contem somente os atributos especificados em attributes_to_select
+    create_directories(directories_list: list de str)
+        Cria diretorios especificados em directories_list
+    getDateFormatted(string_datetime: str, only_date: bool)
+        Formata uma string de data e hora. Retorna data e hora ou somente a data de acordo com only_date
+    """
     def __init__(self):
         pass
 
@@ -52,8 +68,6 @@ class DataHandle:
                 os.mkdir(directory)
             except FileExistsError:
                 pass
-
-
 
     def getDateFormatted(self, string_datetime, only_date=False):
         a_datetime = None

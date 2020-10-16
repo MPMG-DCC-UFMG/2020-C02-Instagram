@@ -5,6 +5,32 @@ import os
 from datetime import datetime
 
 class DataCollection:
+    """
+        Contem metodos para coletar posts, comments, perfil e midia de posts.
+        Atributos
+        ----------
+        filename_output: str
+            Nome do arquivo de saida
+        dataHandle: DataHandle class
+            Instancia da classe DataHandle
+        instaloaderInstance: Instaloder.context
+            Contexto da classe local da biblioteca Instaloader. Armazena informacoes dos proxies
+        instaloaderClass: Instalodader class
+            Instancia da classe local da biblioteca Instaloader. Utilizada para chamar metodos de coletas do Instaloader
+        collection_type: str
+            Tipo da coleta para salvar nos documentos e facilitar recuperacao futura.
+        Metodos
+        -------
+        persistData(filename_output: str, document_list: list de str, operation_type: 'w' para write ou 'a' para append)
+            Persite uma lista de documentos em um arquivo (filename_output) ou em outro meio apropriado.
+        getData(filename_input: str, attributes_to_select: list de str)
+            Retorna lista de documentos no arquivo (ou local) filename_input.
+            Cada documento contem somente os atributos especificados em attributes_to_select
+        create_directories(directories_list: list de str)
+            Cria diretorios especificados em directories_list
+        getDateFormatted(string_datetime: str, only_date: bool)
+            Formata uma string de data e hora. Retorna data e hora ou somente a data de acordo com only_date
+        """
     def __init__(self, filename_output, dataHandle, instaloaderInstance, instaloaderClass,
                  collection_type):
         self.filename_output = filename_output
@@ -12,12 +38,6 @@ class DataCollection:
         self.instaloaderInstance = instaloaderInstance
         self.instaloaderClass = instaloaderClass
         self.collection_type = collection_type
-
-    def set_instaloaderInstance(self, instaloaderInstance):
-        self.instaloaderInstance = instaloaderInstance
-
-    def set_instaloaderClass(self, instaloaderClass):
-        self.instaloaderClass = instaloaderClass
 
     def __getErrorDocument(self, exception_obj, exc_type, exc_tb):
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
@@ -31,11 +51,10 @@ class DataCollection:
     def __getProfileDocument(self, profile_object):
         user_profile = {"identificador": str(profile_object.userid),
                         "nome_do_usuario": profile_object.username,
-                        "nome_completo": profile_object.full_name,
-                        "localizacao": None,
+                        "nome_completo": str(profile_object.full_name).replace("\n",""),
                         "numero_de_seguidores": profile_object.followers,
                         "numero_de_seguidos": profile_object.followees,
-                        "biografia": profile_object.biography,
+                        "biografia": str(profile_object.biography).replace("\n",""),
                         "tipo_de_coleta": self.collection_type}
 
         return user_profile
