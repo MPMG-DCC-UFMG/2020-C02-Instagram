@@ -260,12 +260,12 @@ class Coletor():
 
             print("Processo de coleta iniciado em {}\tSalvando dados em {}".format(start_time, self.data_path_source_files), flush=True)
 
-            if self.collection_type != "por_usuario" and self.collection_type != "por_hashtag":
+            if self.collection_type != "usuarios" and self.collection_type != "hahstags":
                 print("\nTipo de coleta nao identificado. Finalizando script ", flush=True)
                 sys.exit(1)
 
 
-            if self.collection_type == "por_usuario":
+            if self.collection_type == "usuarios":
                 ### COLETA 1.1 - PERFIL
                 document_input_list=self.user_list
                 filename_output = self.filename_profiles_posts
@@ -287,7 +287,7 @@ class Coletor():
                 else:
                     print("\nAtencao: Sem perfis armazenados para coletar posts.",flush=True)
 
-            if self.collection_type == "por_hashtag":
+            if self.collection_type == "hashtags":
                 ### COLETA 1 - HASHTAGS
                 document_input_list = self.hashtag_list
                 filename_output = self.filename_posts
