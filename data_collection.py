@@ -21,15 +21,14 @@ class DataCollection:
             Tipo da coleta para salvar nos documentos e facilitar recuperacao futura.
         Metodos
         -------
-        persistData(filename_output: str, document_list: list de str, operation_type: 'w' para write ou 'a' para append)
-            Persite uma lista de documentos em um arquivo (filename_output) ou em outro meio apropriado.
-        getData(filename_input: str, attributes_to_select: list de str)
-            Retorna lista de documentos no arquivo (ou local) filename_input.
-            Cada documento contem somente os atributos especificados em attributes_to_select
-        create_directories(directories_list: list de str)
-            Cria diretorios especificados em directories_list
-        getDateFormatted(string_datetime: str, only_date: bool)
-            Formata uma string de data e hora. Retorna data e hora ou somente a data de acordo com only_date
+        collectProfile(username: str)
+            Coleta informacoes do perfil 'username'
+        collectPosts(data_min: data, data_max: data, post_limit: int, username: str, hashtag: str)
+            Coleta posts de um usuario ou hahstag no periodo entre data_min e data_max e de acordo com o limite post_limit
+        downloadPostMedia(post_id: str, media_url: str)
+            Coleta midia de um post (video ou imagem)
+        collectComments(post_id: str, comments_by_post_limit: int, line_debug_number: int)
+            Coleta comentarios de um post de acordo com o limite comments_by_post
         """
     def __init__(self, filename_output, dataHandle, instaloaderInstance, instaloaderClass,
                  collection_type):

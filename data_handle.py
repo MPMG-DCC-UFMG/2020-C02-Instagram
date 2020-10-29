@@ -42,7 +42,7 @@ class DataHandle:
 
 
     def getData(self, filename_input, attributes_to_select):
-        ### (TODO) ARQUIVO OU PEGA PELO KAFKA
+        ### (TODO) ARQUIVO OU RECUPERA PELO KAFKA
         return self.__getDataFromFile(filename_input=filename_input, attributes_to_select=attributes_to_select)
 
     def __getDataFromFile(self, filename_input, attributes_to_select):
@@ -73,12 +73,14 @@ class DataHandle:
         a_datetime = None
         string_datetime = string_datetime.replace("\"", "")
         string_datetime = string_datetime.replace("'", "")
-
         if only_date is True:
             try:
                 a_datetime = datetime.strptime(string_datetime, '%Y-%m-%d')
             except Exception as e:
-                print("Erro ao formatar data do tipo:", string_datetime, "Erro detalhado:", e, flush=True)
+                try:
+                    a_datetime = datetime.strptime(string_datetime, '%d-%m-%Y')
+                except Exception as e:
+                    print("Erro ao formatar data do tipo:", string_datetime, "Erro detalhado:", e, flush=True)
         else:
             try:
                 a_datetime = datetime.strptime(string_datetime, '%Y-%m-%d %H:%M:%S')
@@ -92,7 +94,10 @@ class DataHandle:
                         try:
                             a_datetime = datetime.strptime(string_datetime, '%a %b %d %H:%M:%S +0000 %Y')
                         except Exception as e:
-                            print("Erro ao formatar data do tipo:", string_datetime, "\tNao foi possivel identificar um padrao na string.", flush=True)
-
+                            try:
+                                a_datetime = datetime.strptime(string_datetime, '%d-%m-%Y %H:%M:%S')
+                            except Exception as e:
+                                print("Erro ao formatar data do tipo:", string_datetime,
+                                      "\tNao foi possivel identificar um padrao na string.", flush=True)
         return (a_datetime)
 

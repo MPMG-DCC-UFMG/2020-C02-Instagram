@@ -5,7 +5,7 @@ import os
 from datetime import datetime
 
 from data_handle import DataHandle
-import our_instaloader.instaloader as myinstaloader
+import local_instaloader.instaloader as localinstaloader
 from data_collection import DataCollection
 
 import json
@@ -21,6 +21,11 @@ try:
     os.makedirs(TARGET_JSON_FOLDER)
 except Exception as e:
     pass
+
+
+## TODO: resolver .sh, adicionar verificacao usuarios e palavras a coletar midias, remover funcao de coletar por tipo de coleta,
+## TODO: adicionar todos os documentos em um arquivo unico ao final da coleta, centralizar erros no arquivo unico
+## TODO: se maximo_posts nao for informado considerar ate 5k posts; adequar arquivo de exemplo e verificacao de atributos de entrada
 
 
 class Coletor():
@@ -162,15 +167,15 @@ class Coletor():
                 print(a_message, '\tData e hora: ', datetime.now(),flush=True)
 
                 proxy_info = self.__get_proxy()
-                instaloaderInstance = myinstaloader.Instaloader(proxies=proxy_info)
+                instaloaderInstance = localinstaloader.Instaloader(proxies=proxy_info)
 
                 if collection_type == "posts_hashtag":
                     instaloaderInstance.login(user=self.instagram_user, passwd=self.instagram_passwd)
 
                 dataCollection = DataCollection(filename_output=filename_output, dataHandle=dataHandle,
-                                                 instaloaderInstance=instaloaderInstance,
-                                                 instaloaderClass=myinstaloader,
-                                                 collection_type=self.collection_type)
+                                                instaloaderInstance=instaloaderInstance,
+                                                instaloaderClass=localinstaloader,
+                                                collection_type=self.collection_type)
 
                 if proxy_info is None:
                     print("\t!!!ATENCAO!!!: Esta coleta nao esta utilizando proxy.")

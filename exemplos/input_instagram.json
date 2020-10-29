@@ -11,6 +11,5 @@
   "maximo_posts": 20,
   "maximo_comentarios": 100,
   "pasta_da_saida": "data",
-  "coletor": "instagram",
-  "tipo_coleta": "usuarios"
+  "coletor": "instagram"
 }
