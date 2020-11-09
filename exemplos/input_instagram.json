@@ -4,12 +4,12 @@
   "login_senha": "senha",
   "usuarios": ["anvisaoficial"],
   "usuarios_a_baixar_midias": ["anvisaoficial"],
-  "palavras": ["covid19"],
-  "palavras_a_baixar_midias": ["covid19"],
-  "data_min": "2020-8-1",
-  "data_max": "2020-10-1",
-  "maximo_posts": 20,
-  "maximo_comentarios": 100,
+  "palavras": ["pandemia"],
+  "palavras_a_baixar_midias": ["pandemia"],
+  "data_min": "01-08-2020",
+  "data_max": "10-01-2020",
+  "maximo_posts": 5,
+  "maximo_comentarios": 5,
   "pasta_da_saida": "data",
   "coletor": "instagram"
 }

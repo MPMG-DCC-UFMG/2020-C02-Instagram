@@ -41,23 +41,27 @@ class DataHandle:
                     file_output.flush()
 
 
-    def getData(self, filename_input, attributes_to_select):
+    def getData(self, filename_input, attributes_to_select=None, document_type = None):
         ### (TODO) ARQUIVO OU RECUPERA PELO KAFKA
-        return self.__getDataFromFile(filename_input=filename_input, attributes_to_select=attributes_to_select)
+        return self.__getDataFromFile(filename_input=filename_input, attributes_to_select=attributes_to_select, document_type=document_type)
 
-    def __getDataFromFile(self, filename_input, attributes_to_select):
+    def __getDataFromFile(self, filename_input, attributes_to_select=None, document_type=None):
         document_list = []
 
         if (os.path.exists(filename_input) is True):
-            with open(filename_input, "r", encoding='utf-8') as filename_input:
-                for document in filename_input:
+            with open(filename_input, "r", encoding='utf-8') as file_input:
+                for document in file_input:
                     document_input = json.loads(document)
 
-                    document_output = {}
-                    for attribute_name in attributes_to_select:
-                        document_output[attribute_name] = document_input[attribute_name]
+                    if document_type is None or (document_type is not None and document_input["tipo_documento"] == document_type):
+                        document_output = {}
+                        if attributes_to_select is not None and len(attributes_to_select) > 0:
+                            for attribute_name in attributes_to_select:
+                                document_output[attribute_name] = document_input[attribute_name]
+                        else:
+                            document_output = document_input
 
-                    document_list.append(document_output)
+                        document_list.append(document_output)
 
         return(document_list)
 

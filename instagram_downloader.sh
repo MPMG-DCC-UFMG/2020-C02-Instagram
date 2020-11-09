@@ -1,6 +1,16 @@
 #! /bin/bash
 
-for f in ${BASH_ARGV[*]} ; do
-    { docker run -v "$(python3 json_maker.py $f --output-folder):/var/instagram-crawler/" --rm -it $(docker images | grep 'mp_tt' | head -1 | cut -d' ' -f 1) python3 /home/mp/coletor-instagram/main.py -d "$(python3 json_maker.py $f)" ; }
-    # -e LANG=C.UTF-8
-done
+mkdir /data/
+cp exemplos/input_instagram.json /data/
+if [ $# -eq 0 ]
+  then
+    echo "Nao foi possivel iniciar o coletor. Informe o nome do arquivo de entrada ou o json."
+fi
+if [ $# -eq 1 ]
+  then
+    docker run -v "/data:/var/instagram-crawler" --rm -it instagram_mp_v1 python3 /home/mp/coletor-instagram/main.py "$1"
+fi
+if [ $# -eq 2 ]
+  then
+    docker run -v "/data:/var/instagram-crawler" --rm -it instagram_mp_v1 python3 /home/mp/coletor-instagram/main.py -d "$2"
+fi

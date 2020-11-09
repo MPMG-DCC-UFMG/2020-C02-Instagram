@@ -31,12 +31,12 @@ class DataCollection:
             Coleta comentarios de um post de acordo com o limite comments_by_post
         """
     def __init__(self, filename_output, dataHandle, instaloaderInstance, instaloaderClass,
-                 collection_type):
+                 document_type):
         self.filename_output = filename_output
         self.dataHandle = dataHandle
         self.instaloaderInstance = instaloaderInstance
         self.instaloaderClass = instaloaderClass
-        self.collection_type = collection_type
+        self.document_type = document_type
 
     def __getErrorDocument(self, exception_obj, exc_type, exc_tb):
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
@@ -49,37 +49,33 @@ class DataCollection:
 
     def __getProfileDocument(self, profile_object):
         user_profile = {"identificador": str(profile_object.userid),
-                        "nome_do_usuario": profile_object.username,
+                        "nome_do_usuario": str(profile_object.username),
                         "nome_completo": str(profile_object.full_name).replace("\n",""),
-                        "numero_de_seguidores": profile_object.followers,
-                        "numero_de_seguidos": profile_object.followees,
+                        "numero_de_seguidores": int(profile_object.followers),
+                        "numero_de_seguidos": int(profile_object.followees),
                         "biografia": str(profile_object.biography).replace("\n",""),
-                        "tipo_de_coleta": self.collection_type}
+                        "tipo_documento": self.document_type}
 
         return user_profile
 
     def collectProfile(self, username):
-        user_profile_document = None
+        error_document = None
         has_error = False
         try:
             profile = self.instaloaderClass.Profile.from_username(self.instaloaderInstance.context, username)
 
             user_profile_document = self.__getProfileDocument(profile_object=profile)
 
+            self.dataHandle.persistData(filename_output=self.filename_output,
+                                        document_list=[user_profile_document],
+                                        operation_type="a")
+
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
-            user_profile_document = self.__getErrorDocument(exception_obj=e, exc_type=exc_type, exc_tb=exc_tb)
+            error_document = self.__getErrorDocument(exception_obj=e, exc_type=exc_type, exc_tb=exc_tb)
             has_error = True
 
         finally:
-            operation_type = "w" if has_error == True else "a"
-
-            self.dataHandle.persistData(filename_output=self.filename_output,
-                                        document_list=[user_profile_document],
-                                        operation_type=operation_type)
-
-            error_document = user_profile_document if has_error is True else None
-
             return(has_error,error_document)
 
 
@@ -93,7 +89,7 @@ class DataCollection:
                 instragram_source_object = self.instaloaderClass.Profile.from_username(self.instaloaderInstance.context, username)
 
             else:
-                instragram_source_object = self.instaloaderClass.Hashtag.from_name(self.instaloaderInstance.context, name=hashtag)
+                instragram_source_object = self.instaloaderClass.Hashtag.from_name(self.instaloaderInstance.context,name=hashtag)
 
             posts = instragram_source_object.get_posts()
 
@@ -132,17 +128,11 @@ class DataCollection:
             error_document = self.__getErrorDocument(exception_obj=e, exc_type=exc_type, exc_tb=exc_tb)
             has_error = True
         finally:
-            if has_error is True:
-                self.dataHandle.persistData(filename_output=self.filename_output,
-                                            document_list=[error_document],
-                                            operation_type="w")
-
             return (has_error, error_document)
-        
-    def __getPostDocument(self, post_object):
 
-        post_document = {"identificador": post_object.shortcode,
-                        "identificador_usuario":post_object.owner_id,
+    def __getPostDocument(self, post_object):
+        post_document = {"identificador": str(post_object.shortcode),
+                        "identificador_usuario":str(post_object.owner_id),
                         "texto": post_object.caption,
                         "numero_likes": int(post_object.likes),
                         "numero_comentarios": int(post_object.comments),
@@ -150,7 +140,8 @@ class DataCollection:
                         "localizacao": post_object.location,
                         "tipo_midia": "imagem" if post_object.typename == "GraphImage" else ("video" if post_object.typename == "GraphVideo" else "imagem"),
                         "identificador_midia": post_object.video_url if post_object.typename == "GraphVideo" else post_object.url,
-                        "tipo_de_coleta": self.collection_type
+                        "tipo_documento": self.document_type,
+                        "identificador_coleta": str(post_object.owner_username)
                         }
 
         return(post_document)
@@ -164,7 +155,6 @@ class DataCollection:
 
             if (os.path.exists(media_filename) is False):
                 self.instaloaderInstance.download_pic(filename=media_filename, url=media_url, mtime=datetime.now())
-
 
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -185,8 +175,9 @@ class DataCollection:
                                 "nome_do_usuario": str(comment_obj.owner.username),
                                 "data_comentario": str(comment_obj.created_at_utc),
                                 "texto": comment_obj.text,
-                                "numero_likes": comment_obj.likes_count
-                                }
+                                "numero_likes": int(comment_obj.likes_count),
+                                "tipo_documento": self.document_type}
+
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
@@ -229,10 +220,4 @@ class DataCollection:
             has_error = True
 
         finally:
-            operation_type = "w" if has_error == True else "a"
-
-            self.dataHandle.persistData(filename_output=self.filename_output,
-                                        document_list=[error_document],
-                                        operation_type=operation_type)
-
             return (has_error, error_document)
