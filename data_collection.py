@@ -87,9 +87,11 @@ class DataCollection:
         try:
             if username is not None:
                 instragram_source_object = self.instaloaderClass.Profile.from_username(self.instaloaderInstance.context, username)
+                identificador_coleta = None
 
             else:
                 instragram_source_object = self.instaloaderClass.Hashtag.from_name(self.instaloaderInstance.context,name=hashtag)
+                identificador_coleta = hashtag
 
             posts = instragram_source_object.get_posts()
 
@@ -111,7 +113,7 @@ class DataCollection:
                             print("\tPosts coletados: {}\tData postagem {} ".format(inserted_posts, str(post.date)),
                                   '\tData e hora: ', datetime.now(), flush=True)
 
-                            post_document = self.__getPostDocument(post_object=post)
+                            post_document = self.__getPostDocument(post_object=post,identificador_coleta=identificador_coleta)
 
                             self.dataHandle.persistData(filename_output=self.filename_output,
                                                         document_list=[post_document],
@@ -130,7 +132,7 @@ class DataCollection:
         finally:
             return (has_error, error_document)
 
-    def __getPostDocument(self, post_object):
+    def __getPostDocument(self, post_object, identificador_coleta=None):
         post_document = {"identificador": str(post_object.shortcode),
                         "identificador_usuario":str(post_object.owner_id),
                         "texto": post_object.caption,
@@ -141,7 +143,7 @@ class DataCollection:
                         "tipo_midia": "imagem" if post_object.typename == "GraphImage" else ("video" if post_object.typename == "GraphVideo" else "imagem"),
                         "identificador_midia": post_object.video_url if post_object.typename == "GraphVideo" else post_object.url,
                         "tipo_documento": self.document_type,
-                        "identificador_coleta": str(post_object.owner_username)
+                        "identificador_coleta": str(post_object.owner_username) if identificador_coleta is None else identificador_coleta
                         }
 
         return(post_document)

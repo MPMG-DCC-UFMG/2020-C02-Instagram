@@ -376,7 +376,7 @@ class Coletor():
                         print("\nAtencao: Nao existem perfis armazenados para coletar posts.",flush=True)
 
                 if collection_type == "hashtag":
-                    ### COLETA 1 - HASHTAGS
+                    ### COLETA 1 -POSTS DE HASHTAGS
                     document_input_list = self.hashtag_list
                     filename_output = self.filename_posts
 
