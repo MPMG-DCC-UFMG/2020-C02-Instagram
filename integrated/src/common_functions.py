@@ -6,6 +6,8 @@ import time
 from kafka import KafkaConsumer
 from kafka import KafkaProducer
 
+import sys
+
 
 # MESSAGES = [ str(datetime.datetime.now()), 'Hello,', 'World' ]
 KAFKA_SERVERS = [ ('hadoopdn-gsi-prod0' + str(j) + '.mpmg.mp.br:6667').replace('010', '10') for j in range(4, 10+1) ]
