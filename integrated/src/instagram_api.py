@@ -13,7 +13,18 @@ import local_instaloader.instaloader as localinstaloader
 
 
 def does_not_need_credential(js):
-    pass
+    coletor = Coletor(input_json=js)
+
+    collection_types = []
+
+    if len(coletor.user_list) > 0:
+        collection_types.append("perfil")
+    if len(coletor.hashtag_list) > 0:
+        collection_types.append("hashtag")
+
+    return "perfil" not in collection_types
+
+
 
 def authenticate(js):
     coletor = Coletor(input_json=js)
