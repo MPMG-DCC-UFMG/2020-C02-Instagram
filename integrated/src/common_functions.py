@@ -11,7 +11,7 @@ from kafka import KafkaProducer
 KAFKA_SERVERS = [ ('hadoopdn-gsi-prod0' + str(j) + '.mpmg.mp.br:6667').replace('010', '10') for j in range(4, 10+1) ]
 KAFKA_SERVERS = KAFKA_SERVERS[:1]
 LIBS = {}
-ROWS_INFO_ATOMIC = [ l.strip() for l in open('../data/info_atomic.csv', 'rt') if l.strip() ]
+#ROWS_INFO_ATOMIC = [ l.strip() for l in open('../data/info_atomic.csv', 'rt') if l.strip() ]
 ROWS_INFO_HIGH = [ l.strip() for l in open('../data/info_high.csv', 'rt') if l.strip() ]
 ROWS_INFO_HIGH2ATOMIC = [ l.strip() for l in open('../data/info_high2atomic.csv', 'rt') if l.strip() ]
 ROWS_INFO_TOPICS = [ l.strip() for l in open('../data/info_topics.csv', 'rt') if l.strip() ]
