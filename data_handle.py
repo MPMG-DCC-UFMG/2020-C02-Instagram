@@ -24,13 +24,43 @@ class DataHandle:
         Formata uma string de data e hora. Retorna data e hora ou somente a data de acordo com only_date
     """
     def __init__(self):
-        pass
+        self.profile_post_info_list = []
+        self.post_info_list = []
+        self.comment_info_list = []
+        self.profile_comment_info_list = []
 
+        self.unified_documents_list = []
+
+
+    ### TODO Adaptar KAFKA
     def persistData(self, filename_output, document_list, operation_type):
         ### GRAVA EM ARQUIVO
-        self.__updateDataFile(filename_output=filename_output, document_list=document_list, operation_type=operation_type)
+        ## self.__updateDataFile(filename_output=filename_output, document_list=document_list, operation_type=operation_type)
+        ### Salva em memoria e grava no KAFKA
+        if "profiles_posts.json" in filename_output:
+            if operation_type == "w":
+                self.profile_post_info_list = []
+            self.profile_post_info_list.extend(document_list)
+        elif "posts.json" in filename_output:
+            if operation_type == "w":
+                self.post_info_list = []
+            self.post_info_list.extend(document_list)
+        elif "profiles_comments.json" in filename_output:
+            if operation_type == "w":
+                self.profile_comment_info_list = []
+            self.profile_comment_info_list.extend(document_list)
+        elif "comments.json" in filename_output:
+            if operation_type == "w":
+                self.comment_info_list = []
+            self.comment_info_list.extend(document_list)
+        else:
+            if operation_type == "w":
+                self.unified_documents_list = []
+            self.unified_documents_list.extend(document_list)
 
-        ### (TODO) GRAVA NO KAFKA
+
+        #### (TODO) GRAVA no KAFKA
+
 
     def __updateDataFile(self,filename_output, document_list, operation_type):
         with open(filename_output, operation_type, encoding='utf-8') as file_output:
@@ -42,8 +72,31 @@ class DataHandle:
 
 
     def getData(self, filename_input, attributes_to_select=None, document_type = None):
-        ### (TODO) ARQUIVO OU RECUPERA PELO KAFKA
-        return self.__getDataFromFile(filename_input=filename_input, attributes_to_select=attributes_to_select, document_type=document_type)
+        ### Recupera de ARQUIVO
+        ## return self.__getDataFromFile(filename_input=filename_input, attributes_to_select=attributes_to_select, document_type=document_type)
+        ### Recupera de Memoria
+        return self.__getDataFromMemory(filename_input=filename_input, attributes_to_select=attributes_to_select,
+                                      document_type=document_type)
+
+    def __getDataFromMemory(self, filename_input, document_type, attributes_to_select=None):
+        document_list = []
+
+        input_document_list = self.profile_post_info_list if "profiles_posts.json" in filename_input else (self.post_info_list if "posts.json" in filename_input else self.comment_info_list)
+
+        for document_input in input_document_list:
+            if document_type is None or (document_type is not None and document_input["tipo_documento"] == document_type):
+                document_output = {}
+                if attributes_to_select is not None and len(attributes_to_select) > 0:
+                    for attribute_name in attributes_to_select:
+                        document_output[attribute_name] = document_input[attribute_name]
+                else:
+                    document_output = document_input
+
+                document_list.append(document_output)
+
+        return(document_list)
+
+
 
     def __getDataFromFile(self, filename_input, attributes_to_select=None, document_type=None):
         document_list = []

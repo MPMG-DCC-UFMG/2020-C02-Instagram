@@ -127,7 +127,7 @@ class Coletor():
         self.filename_unified_data_file = '{}{}/{}'.format(self.data_path , self.current_timestamp,str(self.current_timestamp)+".json")
 
 
-    def __get_proxy(self):
+    def __get_proxy(self, does_not_increment=False):
         proxies = None
 
         try:
@@ -135,7 +135,8 @@ class Coletor():
                 self.proxy_index = 0 if self.proxy_index >= len(self.proxy_list) else self.proxy_index
                 proxy = self.proxy_list[self.proxy_index]
 
-                self.proxy_index += 1
+                if does_not_increment is False:
+                    self.proxy_index += 1
 
                 proxies = {
                     'http': "http://"+proxy,
@@ -193,7 +194,6 @@ class Coletor():
             print("Finalizando script...")
             sys.exit(1)
 
-
     def __create_error_file(self, filename_output, error_document):
         try:
             dataHandle = DataHandle()
@@ -224,7 +224,6 @@ class Coletor():
                 print("\n")
                 print(a_message, '\tData e hora: ', datetime.now(),flush=True)
 
-                #proxy_info = self.__get_proxy() if collection_attempts < (self.max_attempts-1) else None
                 proxy_info = self.__get_proxy()
                 instaloaderInstance = localinstaloader.Instaloader(proxies=proxy_info)
 
@@ -377,15 +376,36 @@ class Coletor():
 
                 if collection_type == "hashtag":
                     ### COLETA 1 -POSTS DE HASHTAGS
-                    document_input_list = self.hashtag_list
-                    filename_output = self.filename_posts
 
-                    post_type_to_download_midias_and_comments = "posts_hashtag"
+                    ### Verifica se login valido
+                    try:
+                        proxy_info = self.__get_proxy(does_not_increment=True)
+                        instaloaderInstance = localinstaloader.Instaloader(proxies=proxy_info)
+                        instaloaderInstance.login(user=self.instagram_user, passwd=self.instagram_passwd)
+                    except Exception as e:
+                        exc_type, exc_obj, exc_tb = sys.exc_info()
+                        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                        print('\nErro: ', e, '\tDetalhes: ', exc_type, fname, exc_tb.tb_lineno, '\tData e hora: ',
+                              datetime.now(),
+                              flush=True)
 
-                    self.__execute_data_collection(filename_output=filename_output, dataHandle=dataHandle,
-                                                   document_input_list=document_input_list,
-                                                   debug_message="Inicio da coleta de posts com hashtag",
-                                                   document_type=post_type_to_download_midias_and_comments)
+                        exc_type, exc_obj, exc_tb = sys.exc_info()
+                        error_document = self.__getErrorDocument(exception_obj=e, exc_type=exc_type, exc_tb=exc_tb)
+
+                        self.__create_error_file(filename_output=self.filename_unified_data_file,
+                                                 error_document=error_document)
+                        print("Finalizando script.")
+                        sys.exit(1)
+                    else:
+                        document_input_list = self.hashtag_list
+                        filename_output = self.filename_posts
+
+                        post_type_to_download_midias_and_comments = "posts_hashtag"
+
+                        self.__execute_data_collection(filename_output=filename_output, dataHandle=dataHandle,
+                                                       document_input_list=document_input_list,
+                                                       debug_message="Inicio da coleta de posts com hashtag",
+                                                       document_type=post_type_to_download_midias_and_comments)
 
 
                 ### COLETA 2 - MIDIA DOS POSTS
@@ -445,7 +465,6 @@ class Coletor():
                     print("\nAtencao: Nao existem comentarios armazenados para coletar perfis de comentadores.", flush=True)
 
 
-            ### Unifica dados em um unico arquivo (mudar com KAFKA)
             self.__create_unified_data_file(filename_output=self.filename_unified_data_file)
 
 
