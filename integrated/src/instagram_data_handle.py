@@ -33,33 +33,23 @@ class DataHandle:
 
 
     ### TODO Adaptar KAFKA
-    def persistData(self, filename_output, document_list, operation_type):
+    def persistData(self, filename_output, document_list, data_topic, crawling_id, operation_type=None):
         ### GRAVA EM ARQUIVO
         ## self.__updateDataFile(filename_output=filename_output, document_list=document_list, operation_type=operation_type)
         ### Salva em memoria e grava no KAFKA
         if "profiles_posts.json" in filename_output:
-            if operation_type == "w":
-                self.profile_post_info_list = []
             self.profile_post_info_list.extend(document_list)
+            #### (TODO) GRAVA no KAFKA
+
         elif "posts.json" in filename_output:
-            if operation_type == "w":
-                self.post_info_list = []
             self.post_info_list.extend(document_list)
         elif "profiles_comments.json" in filename_output:
-            if operation_type == "w":
-                self.profile_comment_info_list = []
             self.profile_comment_info_list.extend(document_list)
         elif "comments.json" in filename_output:
-            if operation_type == "w":
-                self.comment_info_list = []
             self.comment_info_list.extend(document_list)
         else:
-            if operation_type == "w":
-                self.unified_documents_list = []
+            ### TODO apos executar essa linha, devo alterar o status da coleta para finalizado
             self.unified_documents_list.extend(document_list)
-
-
-        #### (TODO) GRAVA no KAFKA
 
 
     def __updateDataFile(self,filename_output, document_list, operation_type):

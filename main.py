@@ -208,8 +208,6 @@ class Coletor():
             print("Finalizando script...")
             sys.exit(1)
 
-
-
     def __execute_data_collection(self, filename_output, dataHandle, document_input_list, debug_message, document_type):
         collection_sucess = False
         error_document = None

@@ -84,6 +84,8 @@ class Coletor():
             self.proxy_index = 0
             self.max_attempts = len(self.proxy_list)+1
 
+            self.dataHandle = DataHandle()
+
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
@@ -170,3 +172,126 @@ class Coletor():
 
             print("Finalizando script...")
             sys.exit(1)
+
+
+    def __execute_data_collection(self, filename_output, dataHandle, document_input_list, debug_message, document_type):
+        collection_sucess = False
+        error_document = None
+        has_error = False
+
+        try:
+            collection_attempts = 0
+
+            while collection_sucess is False and collection_attempts < self.max_attempts:
+                prefix_str = "(Re)" if collection_attempts > 0 else " "
+                a_message = "{}{}".format(prefix_str, debug_message)
+                print("\n")
+                print(a_message, '\tData e hora: ', datetime.now(),flush=True)
+
+                proxy_info = self.get_proxy()
+                instaloaderInstance = localinstaloader.Instaloader(proxies=proxy_info)
+
+                if document_type == "posts_hashtag":
+                    instaloaderInstance.login(user=self.instagram_user, passwd=self.instagram_passwd)
+
+                dataCollection = DataCollection(filename_output=filename_output, dataHandle=dataHandle,
+                                                instaloaderInstance=instaloaderInstance,
+                                                instaloaderClass=localinstaloader,
+                                                document_type=document_type)
+
+                if proxy_info is None:
+                    print("\t!!!ATENCAO!!!: Esta coleta nao esta utilizando proxy.")
+                else:
+                    proxy_alias = proxy_info["https"].split("@")[1]
+                    print("\tUtilizando o proxy:", proxy_alias)
+
+                documents_collected = 0
+                for document_input in document_input_list:
+                    documents_collected +=1
+                    if document_type == "profiles_posts":
+                        print("\tColetando perfil do usuario {}".format(document_input), '\tData e hora: ', datetime.now(),
+                              flush=True)
+                        has_error, error_document = dataCollection.collectProfile(username=document_input)
+                    elif document_type == "posts_profile":
+                        print("\tColetando posts do usuario {} {}/{}".format(document_input["nome_do_usuario"], documents_collected, len(document_input_list)),
+                              '\tData e hora: ',
+                              datetime.now(), "\n",
+                              flush=True)
+                        has_error, error_document = dataCollection.collectPosts(data_min=self.min_date,
+                                                                                 data_max=self.max_date,
+                                                                                 post_limit=self.max_posts,
+                                                                                 username=document_input['nome_do_usuario'],
+                                                                                 hashtag=None)
+                    elif document_type == "posts_hashtag":
+                        print("\tColetando posts da hashtag {}".format(document_input),
+                              '\tData e hora: ', datetime.now(), "\n",
+                              flush=True)
+                        has_error, error_document = dataCollection.collectPosts(data_min=self.min_date,
+                                                                                 data_max=self.max_date,
+                                                                                 post_limit=self.max_posts,
+                                                                                 username=None, hashtag=document_input)
+                    elif document_type == "media":
+                        print("\tColetando media do post {} {}/{}".format(document_input['identificador'], documents_collected, len(document_input_list)),'\tData e hora: ', datetime.now(), flush=True)
+                        has_error, error_document = dataCollection.downloadPostMedia(
+                            post_id=document_input['identificador'],
+                            media_url=document_input['identificador_midia'])
+                    elif document_type == "comments_profile" or document_type == "comments_hashtag":
+                        print("\tColetando comments do post {} {}/{}".format(document_input['identificador'],documents_collected,len(document_input_list)),'\tData e hora: ', datetime.now(),flush=True)
+                        has_error, error_document = dataCollection.collectComments(
+                            post_id=document_input['identificador'],
+                            comments_by_post_limit=self.max_comments,
+                            line_debug_number=1000)
+                    elif document_type == "profiles_comments":
+                        print("\tColetando perfil do usuario {} {}/{}".format(document_input['nome_do_usuario'], documents_collected, len(document_input_list)), '\tData e hora: ', datetime.now(),
+                              flush=True)
+                        has_error, error_document = dataCollection.collectProfile(username=document_input['nome_do_usuario'])
+                    else:
+                        print("Tipo de coleta nao identificado. Finalizando script...")
+                        sys.exit(1)
+
+                    if has_error is True:
+                        if "429" in error_document:
+                            print("Muitas requisicoes feitas recentemente. Erro:", error_document)
+                        collection_attempts += 1
+                        collection_sucess = False
+                        break
+                    else:
+                        collection_sucess = True
+
+        except Exception as e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            print("\nProcesso de coleta sera finalizado devido a erro. O erro: ", e, '\tDetalhes: ', exc_type, fname, exc_tb.tb_lineno, '\tData e hora: ',datetime.now(),flush=True)
+
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            error_document = self.getErrorDocument(exception_obj=e, exc_type=exc_type, exc_tb=exc_tb)
+
+            self.create_error_file(filename_output=self.filename_unified_data_file,
+                                     error_document=error_document)
+            print("Finalizando script.")
+            sys.exit(1)
+        finally:
+            if has_error is True:
+                print("{}{}".format("\nProcesso de coleta sera finalizado devido a erro. O erro: ",
+                                    error_document), flush=True)
+                self.create_error_file(filename_output=self.filename_unified_data_file,
+                                         error_document=error_document)
+                sys.exit(1)
+
+    def download_profile(self):
+        ### COLETA 1.1 - PERFIL
+        document_input_list = self.user_list
+        filename_output = self.filename_profiles_posts
+
+        self.__execute_data_collection(filename_output=filename_output, dataHandle=self.dataHandle,
+                                       document_input_list=document_input_list,
+                                       debug_message="Inicio da coleta de perfil de usuarios",
+                                       document_type="profiles_posts")
+
+    def download_single_user_posts(self):
+        print("download_single_user_posts")
+        pass
+
+    def download_single_word_posts(self):
+        print("download_single_word_posts")
+        pass
