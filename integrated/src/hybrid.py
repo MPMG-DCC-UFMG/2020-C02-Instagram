@@ -15,7 +15,7 @@ if __name__ == '__main__':
     '''
 
     if '-j' in sys.argv:
-        atomic_level_request = json.loads([ l.strip() for l in open('../data/my_atomic_instance.txt', 'rt') if l.strip() ][0])
+        atomic_level_request = json.loads([ l.strip() for l in open('temp.txt', 'rt') if l.strip() ][0])
         common.crawl_atomic(atomic_level_request)
     else:
         while True:
