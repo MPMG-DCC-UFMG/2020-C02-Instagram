@@ -38,6 +38,7 @@ class DataCollection:
         self.instaloaderClass = instaloaderClass
         self.document_type = document_type
 
+
     def __getErrorDocument(self, exception_obj, exc_type, exc_tb):
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
         error_str = '{}'.format(str(exception_obj))

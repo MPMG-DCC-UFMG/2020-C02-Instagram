@@ -84,6 +84,7 @@ class Coletor():
             self.proxy_index = 0
             self.max_attempts = len(self.proxy_list)+1
 
+
             self.dataHandle = DataHandle()
 
         except Exception as e:
@@ -278,9 +279,10 @@ class Coletor():
                                          error_document=error_document)
                 sys.exit(1)
 
-    def download_profile(self):
+    def download_profile(self, value, crawling_id):
         ### COLETA 1.1 - PERFIL
-        document_input_list = self.user_list
+        self.dataHandle.set_crawling_id(crawling_id)
+        document_input_list = [value]
         filename_output = self.filename_profiles_posts
 
         self.__execute_data_collection(filename_output=filename_output, dataHandle=self.dataHandle,

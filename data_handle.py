@@ -31,6 +31,11 @@ class DataHandle:
 
         self.unified_documents_list = []
 
+        self.crawling_id = None
+
+    def set_crawling_id(self, crawling_id):
+        self.crawling_id = crawling_id
+
 
     ### TODO Adaptar KAFKA
     def persistData(self, filename_output, document_list, operation_type):
@@ -59,7 +64,7 @@ class DataHandle:
             self.unified_documents_list.extend(document_list)
 
 
-        #### (TODO) GRAVA no KAFKA
+        #### (TODO) GRAVA no KAFKA --- usar o self.crawling_id
 
 
     def __updateDataFile(self,filename_output, document_list, operation_type):
