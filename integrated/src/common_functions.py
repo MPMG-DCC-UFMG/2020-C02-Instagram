@@ -57,9 +57,13 @@ def crawl_atomic(atomic_request):
             function_name = copy.deepcopy(this_respective_function)
 
     if function_name is not None:
-        # social_media, 
-        LIBS[net].shell(json.dumps(js), mode)
-        getattr(LIBS[net], function_name)(value, crawling_id)
+        # social_media,
+        try:
+            coletor = LIBS[net].get_coletor_object(js)
+            getattr(coletor, function_name)(value, crawling_id)
+        except Exception as e:
+            LIBS[net].shell(json.dumps(js), mode)
+            getattr(LIBS[net], function_name)(value, crawling_id)
     else:
         print('not prepared to deal with the following request: %s' % json.dumps(atomic_request))
         exit(0)

@@ -27,6 +27,10 @@ def does_not_need_credential(js):
 
     return "hashtag" not in collection_types
 
+def get_coletor_object(js):
+    coletor = Coletor(input_json=js)
+
+    return coletor
 
 
 def authenticate(js):
