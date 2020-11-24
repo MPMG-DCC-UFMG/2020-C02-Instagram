@@ -95,6 +95,10 @@ def connect_kafka_producer():
     global KAFKA_SERVERS
 
     _producer = None
+
+    return _producer
+    ### XXX TODO
+
     try:
         _producer = KafkaProducer(bootstrap_servers=KAFKA_SERVERS, api_version=(0, 10))
         if not _producer.bootstrap_connected():
