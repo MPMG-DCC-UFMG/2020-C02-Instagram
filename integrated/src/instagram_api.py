@@ -25,7 +25,7 @@ def does_not_need_credential(js):
     print(coletor.user_list, "\n", coletor.hashtag_list)
     print(collection_types)
 
-    return "perfil" not in collection_types
+    return "hashtag" not in collection_types
 
 
 
