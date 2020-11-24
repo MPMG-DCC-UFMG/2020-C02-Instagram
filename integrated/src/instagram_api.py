@@ -22,8 +22,8 @@ def does_not_need_credential(js):
     if len(coletor.hashtag_list) > 0:
         collection_types.append("hashtag")
 
-    print(coletor.user_list, "\n", coletor.hashtag_list)
-    print(collection_types)
+    # print(coletor.user_list, "\n", coletor.hashtag_list)
+    # print(collection_types)
 
     return "hashtag" not in collection_types
 
