@@ -144,8 +144,8 @@ def add_low_level_requests_to_kafka(atomic_requests):
         topic = get_social_network_topic(net)
         instance = json.dumps([ net, mode, value, which, js ])
         print(instance)
-        print(producer_instance)
-        sys.exit(0)
+        # print(producer_instance)
+        # sys.exit(0)
         sent = publish_kafka_message(producer_instance, topic, 'raw', 'test msg XXX')
         sent = 1 # XXX publish_kafka_message(producer_instance, topic, 'raw', instance)
         if sent:
